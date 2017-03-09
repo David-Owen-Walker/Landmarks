@@ -15,17 +15,17 @@ class LandmarksPlugin extends Omeka_Plugin_AbstractPlugin
     );
 
 	protected $_hooks = array(
-		'install',
-		'uninstall',
-		'define_acl',
+//		'install',
+//		'uninstall',
+//		'define_acl',
 //		'define_routes',
 //		'admin_head',
 //		'admin_dashboard',
 //		'upgrade',
 	);
 
-	public function hookInstall()
-	{
+//	public function hookInstall()
+//	{
 //		$db = $this->_db;
 //
 //		$tourQuery = "
@@ -55,14 +55,14 @@ class LandmarksPlugin extends Omeka_Plugin_AbstractPlugin
 //
 //		$db->query( $tourQuery );
 //		$db->query( $tourItemQuery );
-	}
+//	}
 //
-	public function hookUninstall()
-	{
+//	public function hookUninstall()
+//	{
 //		$db = $this->_db;
 //		$db->query( "DROP TABLE IF EXISTS `$db->TourItem`" );
 //		$db->query( "DROP TABLE IF EXISTS `$db->Tour`" );
-	}
+//	}
 //
 //    public function hookUpgrade($args)
 //    {
@@ -80,20 +80,20 @@ class LandmarksPlugin extends Omeka_Plugin_AbstractPlugin
 //	    }
 //	}
 	
-	public function hookDefineAcl( $args )
-	{
-		$acl = $args['acl'];
-
-		// Create the ACL context
-		$acl->addResource( 'TourBuilder_Tours' );
-		
-		// Allow anyone to look but not touch
-		$acl->allow( null, 'TourBuilder_Tours', array('browse', 'show') );
-		
-		// Allow contributor (and better) to do anything with tours
-		$acl->allow( 'contributor','TourBuilder_Tours');
-
-	}
+//	public function hookDefineAcl( $args )
+//	{
+//		$acl = $args['acl'];
+//
+//		// Create the ACL context
+//		$acl->addResource( 'TourBuilder_Tours' );
+//		
+//		// Allow anyone to look but not touch
+//		$acl->allow( null, 'TourBuilder_Tours', array('browse', 'show') );
+//		
+//		// Allow contributor (and better) to do anything with tours
+//		$acl->allow( 'contributor','TourBuilder_Tours');
+//
+//	}
 
 //	public function hookDefineRoutes( $args )
 //	{
@@ -115,15 +115,15 @@ class LandmarksPlugin extends Omeka_Plugin_AbstractPlugin
 //		return $stats;
 //	}
 
-	public function filterPublicNavigationMain( $navs )
-	{
-		$navs[] = array(
-			'label' => __('Landmarks'),
-			'uri' => url( 'landmarks' ),
-			'visible' => true
-		);
-		return $navs;
-	}
+//	public function filterPublicNavigationMain( $navs )
+//	{
+//		$navs[] = array(
+//			'label' => __('Landmarks'),
+//			'uri' => url( 'landmarks' ),
+//			'visible' => true
+//		);
+//		return $navs;
+//	}
 
 //	public function hookAdminDashboard()
 //	{
