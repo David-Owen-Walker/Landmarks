@@ -5,7 +5,8 @@ class LandmarkTable extends Omeka_Db_Table
 
 	public function getSelect()
 	{
-		$select = $this->getTable( 'Item' ) -> getSelect();//parent::getSelect()->order('tours.id');
+		$select = $this->getTable( 'Item' ) -> getSelect();
+        //parent::getSelect()->order('tours.id');
 		return $select;
 	}
 	public function getSelectForFindBy($params = array())
@@ -42,7 +43,7 @@ class LandmarkTable extends Omeka_Db_Table
                 		$select->order("$alias.id $sortDir");
             		}
         	}
-        	$this->applySearchFilters($select, $params);
+//        	$this->applySearchFilters($select, $params);
         	//fire_plugin_hook($this->_getHookName('browse_sql'),
         	//                 array('select' => $select, 'params' => $params));
         	return $select;
