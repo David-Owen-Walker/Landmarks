@@ -9,7 +9,7 @@ class LandmarksPlugin extends Omeka_Plugin_AbstractPlugin
 {
 	protected $_filters = array(
         'api_resources',
-		'public_navigation_main',
+//		'public_navigation_main',
 //		'admin_dashboard_stats',
 //		'admin_navigation_main' 
     );
