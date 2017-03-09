@@ -17,7 +17,7 @@ class LandmarksPlugin extends Omeka_Plugin_AbstractPlugin
 	protected $_hooks = array(
 //		'install',
 //		'uninstall',
-//		'define_acl',
+		'define_acl',
 //		'define_routes',
 //		'admin_head',
 //		'admin_dashboard',
@@ -80,20 +80,20 @@ class LandmarksPlugin extends Omeka_Plugin_AbstractPlugin
 //	    }
 //	}
 	
-//	public function hookDefineAcl( $args )
-//	{
-//		$acl = $args['acl'];
-//
-//		// Create the ACL context
-//		$acl->addResource( 'TourBuilder_Tours' );
-//		
-//		// Allow anyone to look but not touch
-//		$acl->allow( null, 'TourBuilder_Tours', array('browse', 'show') );
-//		
-//		// Allow contributor (and better) to do anything with tours
-//		$acl->allow( 'contributor','TourBuilder_Tours');
-//
-//	}
+	public function hookDefineAcl( $args )
+	{
+		$acl = $args['acl'];
+
+		// Create the ACL context
+		$acl->addResource( 'Landmarks' );
+		
+		// Allow anyone to look but not touch
+		$acl->allow( null, 'Landmarks', array('browse', 'show') );
+		
+		// Allow contributor (and better) to do anything with tours
+		$acl->allow( 'contributor','Landmarks');
+
+	}
 
 //	public function hookDefineRoutes( $args )
 //	{

@@ -1,7 +1,7 @@
 <?php
 /**
  */
-class Api_Tour extends Omeka_Record_Api_AbstractRecordAdapter
+class Api_Landmark extends Omeka_Record_Api_AbstractRecordAdapter
 {
     /**
      * Get the REST representation of a landmark. It's actually just an item, 
