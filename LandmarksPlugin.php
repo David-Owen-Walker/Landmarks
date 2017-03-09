@@ -5,7 +5,7 @@ if( !defined( 'TOURBUILDER_PLUGIN_DIR' ) )
 	define( 'TOURBUILDER_PLUGIN_DIR', dirname( __FILE__ ) );
 }
 
-class TourBuilderPlugin extends Omeka_Plugin_AbstractPlugin
+class LandmarksPlugin extends Omeka_Plugin_AbstractPlugin
 {
 	protected $_filters = array(
         'api_resources',
