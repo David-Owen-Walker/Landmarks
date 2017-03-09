@@ -15,8 +15,8 @@ class TourBuilderPlugin extends Omeka_Plugin_AbstractPlugin
     );
 
 	protected $_hooks = array(
-//		'install',
-//		'uninstall',
+		'install',
+		'uninstall',
 		'define_acl',
 //		'define_routes',
 //		'admin_head',
@@ -24,8 +24,8 @@ class TourBuilderPlugin extends Omeka_Plugin_AbstractPlugin
 //		'upgrade',
 	);
 
-//	public function hookInstall()
-//	{
+	public function hookInstall()
+	{
 //		$db = $this->_db;
 //
 //		$tourQuery = "
@@ -55,15 +55,15 @@ class TourBuilderPlugin extends Omeka_Plugin_AbstractPlugin
 //
 //		$db->query( $tourQuery );
 //		$db->query( $tourItemQuery );
-//	}
+	}
 //
-//	public function hookUninstall()
-//	{
+	public function hookUninstall()
+	{
 //		$db = $this->_db;
 //		$db->query( "DROP TABLE IF EXISTS `$db->TourItem`" );
 //		$db->query( "DROP TABLE IF EXISTS `$db->Tour`" );
-//	}
-
+	}
+//
 //    public function hookUpgrade($args)
 //    {
 //        $oldVersion = $args['old_version'];
