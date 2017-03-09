@@ -6,7 +6,7 @@ class LandmarkTable extends Omeka_Db_Table
 	public function getSelect()
 	{
 		# $this->getTable( 'Item' ) -> getSelect();
-        $select = parent::getSelect()->order('tours.id');
+        $select = parent::getSelect();//->order('tours.id');
 		return $select;
 	}
 	public function getSelectForFindBy($params = array())
