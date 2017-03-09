@@ -9,7 +9,7 @@ class TourBuilderPlugin extends Omeka_Plugin_AbstractPlugin
 {
 	protected $_filters = array(
         'api_resources',
-//		'public_navigation_main',
+		'public_navigation_main',
 //		'admin_dashboard_stats',
 //		'admin_navigation_main' 
     );
@@ -17,7 +17,7 @@ class TourBuilderPlugin extends Omeka_Plugin_AbstractPlugin
 	protected $_hooks = array(
 //		'install',
 //		'uninstall',
-//		'define_acl',
+		'define_acl',
 //		'define_routes',
 //		'admin_head',
 //		'admin_dashboard',
@@ -80,20 +80,20 @@ class TourBuilderPlugin extends Omeka_Plugin_AbstractPlugin
 //	    }
 //	}
 	
-//	public function hookDefineAcl( $args )
-//	{
-//		$acl = $args['acl'];
-//
-//		// Create the ACL context
-//		$acl->addResource( 'TourBuilder_Tours' );
-//		
-//		// Allow anyone to look but not touch
-//		$acl->allow( null, 'TourBuilder_Tours', array('browse', 'show') );
-//		
-//		// Allow contributor (and better) to do anything with tours
-//		$acl->allow( 'contributor','TourBuilder_Tours');
-//
-//	}
+	public function hookDefineAcl( $args )
+	{
+		$acl = $args['acl'];
+
+		// Create the ACL context
+		$acl->addResource( 'TourBuilder_Tours' );
+		
+		// Allow anyone to look but not touch
+		$acl->allow( null, 'TourBuilder_Tours', array('browse', 'show') );
+		
+		// Allow contributor (and better) to do anything with tours
+		$acl->allow( 'contributor','TourBuilder_Tours');
+
+	}
 
 //	public function hookDefineRoutes( $args )
 //	{
@@ -115,15 +115,15 @@ class TourBuilderPlugin extends Omeka_Plugin_AbstractPlugin
 //		return $stats;
 //	}
 
-//	public function filterPublicNavigationMain( $navs )
-//	{
-//		$navs[] = array(
-//			'label' => __('Tours'),
-//			'uri' => url( 'tours' ),
-//			'visible' => true
-//		);
-//		return $navs;
-//	}
+	public function filterPublicNavigationMain( $navs )
+	{
+		$navs[] = array(
+			'label' => __('Landmarks'),
+			'uri' => url( 'landmarks' ),
+			'visible' => true
+		);
+		return $navs;
+	}
 
 //	public function hookAdminDashboard()
 //	{
