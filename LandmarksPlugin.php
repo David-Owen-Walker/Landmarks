@@ -1,9 +1,9 @@
 <?php
-
-if( !defined( 'TOURBUILDER_PLUGIN_DIR' ) )
-{
-	define( 'TOURBUILDER_PLUGIN_DIR', dirname( __FILE__ ) );
-}
+//
+//if( !defined( 'TOURBUILDER_PLUGIN_DIR' ) )
+//{
+//	define( 'TOURBUILDER_PLUGIN_DIR', dirname( __FILE__ ) );
+//}
 
 class LandmarksPlugin extends Omeka_Plugin_AbstractPlugin
 {
