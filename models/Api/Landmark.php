@@ -73,8 +73,8 @@ class Api_Landmark extends Omeka_Record_Api_AbstractRecordAdapter
             'url' => self::getResourceUrl("/files?item={$record->id}"),
             'resource' => 'files',
         );
-//        $representation['tags'] = $this->getTagRepresentations($record);
-//        $representation['element_texts'] = $this->getElementTextRepresentations($record);
+        $representation['tags'] = $this->getTagRepresentations($record);
+        $representation['element_texts'] = $this->getElementTextRepresentations($record);
         $representation['debug'] = get_object_vars($record);
         return $representation;
     }
