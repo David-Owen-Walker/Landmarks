@@ -3,14 +3,14 @@
 class LandmarkTable extends Omeka_Db_Table
 {
     
-    public function setTableName($name = null)
-    {
-        if ($name) {
-            $this->_name = (string) $name;
-        } else {
-            $this->_name = 'items';
-        }
-    }
+//    public function setTableName($name = null)
+//    {
+//        if ($name) {
+//            $this->_name = (string) $name;
+//        } else {
+//            $this->_name = 'items';
+//        }
+//    }
     
 	public function findItemsByLandmarkId( $landmark_id )
 	{
@@ -57,15 +57,10 @@ class LandmarkTable extends Omeka_Db_Table
 		return $items;
 	}
 
-//	public function getSelect()
-//	{
-////		$select = get_db()->Items->getSelect();
-//        $select = parent::getSelect();
-//
-//		$permissions = new Omeka_Db_Select_PublicPermissions( 'Landmarks' );
-//		$permissions->apply( $select, 'landmarks', null );
-//		return $select;
-//	}
+	public function getSelect()
+	{
+		return $this->getTable( 'Item' )->getSelect();
+	}
 	public function getSelectForFindBy($params = array())
     	{
         	$select = $this->getSelect();
