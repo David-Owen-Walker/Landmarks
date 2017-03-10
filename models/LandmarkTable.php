@@ -49,7 +49,7 @@ class LandmarkTable extends Omeka_Db_Table
 
 	public function getSelect()
 	{
-		$select = parent::getSelect()->order('landmarks.id');
+		$select = get_db()->Items->getSelect();//parent::getSelect()->order('landmarks.id');
 
 		$permissions = new Omeka_Db_Select_PublicPermissions( 'Landmarks' );
 		$permissions->apply( $select, 'landmarks', null );

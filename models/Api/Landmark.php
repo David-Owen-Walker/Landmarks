@@ -9,50 +9,58 @@ class Api_Landmark extends Omeka_Record_Api_AbstractRecordAdapter
      * @param Landmark $record
      * @return array
      */
-    public function getRepresentation(Omeka_Record_AbstractRecord $record)
+     public function getRepresentation(Omeka_Record_AbstractRecord $record)
     {
-
-        $db = get_db();
-
-        $tiTable = $db->getTable( 'LandmarkItem' );
-        $glTable = $db->getTable( 'Location' );
-
-        $tiSelect = $tiTable->getSelect();
-        $tiSelect->where( 'landmark_id = ?', array( $record->id ) );
-
-        # Get the landmark items
-        $landmarkItems = $tiTable->fetchObjects( $tiSelect );
-
-        $glSelect = $glTable->getSelect();
-        $glSelect->where( 'item_id = ?', array( $landmarkItems[0]->item_id ) );
-        $geolocations = $glTable->fetchObjects( $glSelect );
-        $startLocation = $geolocations[0];
-
-        #map landmark items to items
-        $generator = function($landmarkItem){
-            $result = array(
-                'id' => $landmarkItem->item_id,
-                'url' => $this->getResourceUrl("/items/{$landmarkItem->item_id}"),
-                'resource' => 'items'
-            );
-            return $result;
-        };
-
-        $items = array_map($generator,$landmarkItems);
-
         $representation = array(
             'id' => $record->id,
-            'url' => $this->getResourceUrl("/landmarks/{$record->id}"),
-            'title' => $record->title,
-            'description' => $record->description,
-            'credits' => $record->credits,
-            'public' => $record->public,
-            'slug' => $record->slug,
-            'postscript_text' => $record->postscript_text,
-            'landmark_image' => $record->landmark_image,
-            'items' => $items,
-            'start' => $startLocation
+            'url' => self::getResourceUrl("/items/{$record->id}"),
+            'public' => (bool) $record->public,
+            'featured' => (bool) $record->featured,
+            'added' => self::getDate($record->added),
+            'modified' => self::getDate($record->modified),
         );
+        if ($record->item_type_id) {
+            $representation['item_type'] = array(
+                'id' => $record->item_type_id,
+                'url' => self::getResourceUrl("/item_types/{$record->item_type_id}"),
+                'name' => $record->Type->name,
+                'resource' => 'item_types',
+            );
+        } else {
+            $representation['item_type'] = null;
+        }
+        if ($record->collection_id) {
+            //check that user has access to the collection
+            $collection = $record->getCollection();
+            if (is_allowed($collection, 'show')) {
+                $representation['collection'] = array(
+                    'id' => $record->collection_id,
+                    'url' => self::getResourceUrl("/collections/{$record->collection_id}"),
+                    'resource' => 'collections',
+                );
+            } else {
+                $representation['collection'] = null;
+            }
+        } else {
+            $representation['collection'] = null;
+        }
+        if ($record->owner_id) {
+            $representation['owner'] = array(
+                'id' => $record->owner_id,
+                'url' => self::getResourceUrl("/users/{$record->owner_id}"),
+                'resource' => 'users',
+            );
+        } else {
+            $representation['owner'] = null;
+        }
+        $representation['files'] = array(
+            'count' => $record->getTable('File')
+                ->count(array('item_id' => $record->id)),
+            'url' => self::getResourceUrl("/files?item={$record->id}"),
+            'resource' => 'files',
+        );
+        $representation['tags'] = $this->getTagRepresentations($record);
+        $representation['element_texts'] = $this->getElementTextRepresentations($record);
         return $representation;
     }
 }
