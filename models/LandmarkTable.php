@@ -2,6 +2,16 @@
 
 class LandmarkTable extends Omeka_Db_Table
 {
+    
+    public function setTableName($name = null)
+    {
+        if ($name) {
+            $this->_name = (string) $name;
+        } else {
+            $this->_name = 'Item';
+        }
+    }
+    
 	public function findItemsByLandmarkId( $landmark_id )
 	{
 		$db = get_db();
@@ -50,7 +60,7 @@ class LandmarkTable extends Omeka_Db_Table
 	public function getSelect()
 	{
 //		$select = get_db()->Items->getSelect();
-        $select = parent::getSelect()->order('landmarks.id');
+        $select = parent::getSelect();
 
 		$permissions = new Omeka_Db_Select_PublicPermissions( 'Landmarks' );
 		$permissions->apply( $select, 'landmarks', null );
