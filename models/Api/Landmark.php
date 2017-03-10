@@ -3,6 +3,20 @@
  */
 class Api_Landmark extends Omeka_Record_Api_AbstractRecordAdapter
 {
+    
+    /**
+     * Initialize the mixins.
+     */
+    protected function _initializeMixins()
+    {
+        $this->_mixins[] = new Mixin_Tag($this);
+        $this->_mixins[] = new Mixin_Owner($this);
+        $this->_mixins[] = new Mixin_ElementText($this);
+        $this->_mixins[] = new Mixin_PublicFeatured($this);
+        $this->_mixins[] = new Mixin_Timestamp($this);
+        $this->_mixins[] = new Mixin_Search($this);
+    }
+    
     /**
      * Get the REST representation of a landmark.
      * 
@@ -59,8 +73,8 @@ class Api_Landmark extends Omeka_Record_Api_AbstractRecordAdapter
             'url' => self::getResourceUrl("/files?item={$record->id}"),
             'resource' => 'files',
         );
-//        $representation['tags'] = $this->getTagRepresentations($record);
-//        $representation['element_texts'] = $this->getElementTextRepresentations($record);
+        $representation['tags'] = $this->getTagRepresentations($record);
+        $representation['element_texts'] = $this->getElementTextRepresentations($record);
         return $representation;
     }
 }
