@@ -1,12 +1,12 @@
 <?php
 
-require_once 'TourTable.php';
+require_once 'LandmarkTable.php';
 
 /**
- * Tour
+ * Landmark
  * @package: Omeka
  */
-class Tour extends Omeka_Record_AbstractRecord implements Zend_Acl_Resource_Interface
+class Landmark extends Omeka_Record_AbstractRecord implements Zend_Acl_Resource_Interface
 {
 	public $title;
 	public $description;
@@ -15,39 +15,39 @@ class Tour extends Omeka_Record_AbstractRecord implements Zend_Acl_Resource_Inte
 	public $public = 0;
 	public $slug;
 	public $postscript_text;
-	public $tour_image;
+	public $landmark_image;
 
 	protected $_related = array( 'Items' => 'getItems','Image' => 'getImage' );
 
     /**
-     * Identify Tour records as relating to the Tours ACL resource.
+     * Identify Landmark records as relating to the Landmarks ACL resource.
      *
      * @return string
      */
     public function getResourceId()
     {
-        return 'TourBuilder_Tours';
+        return 'Landmarks';
     }
 
 	public function getItems()
 	{
-		return $this->getTable()->findItemsByTourId( $this->id );
+		return $this->getTable()->findItemsByLandmarkId( $this->id );
 	}
 
 
 	public function removeAllItems( ) {
 		$db = get_db();
-		$tiTable = $db->getTable( 'TourItem' );
+		$tiTable = $db->getTable( 'LandmarkItem' );
 		$select = $tiTable->getSelect();
-		$select->where( 'tour_id = ?', array( $this->id ) );
+		$select->where( 'landmark_id = ?', array( $this->id ) );
 
-		# Get the tour item
-		$tourItems = $tiTable->fetchObjects( $select );
+		# Get the landmark item
+		$landmarkItems = $tiTable->fetchObjects( $select );
 
-		# Iterate through all the tour items
+		# Iterate through all the landmark items
 		# and remove them
-		for($i = 0; $i < count($tourItems); $i++) {
-			$tourItems[$i]->delete();
+		for($i = 0; $i < count($landmarkItems); $i++) {
+			$landmarkItems[$i]->delete();
 		}
 	}
 
@@ -57,23 +57,23 @@ class Tour extends Omeka_Record_AbstractRecord implements Zend_Acl_Resource_Inte
 			$item_id = $item_id->id;
 		}
 
-		# First get the tour-item object
+		# First get the landmark-item object
 		$db = get_db();
-		$tiTable = $db->getTable( 'TourItem' );
+		$tiTable = $db->getTable( 'LandmarkItem' );
 		$select = $tiTable->getSelect();
-		$select->where( 'tour_id = ?', array( $this->id ) )
+		$select->where( 'landmark_id = ?', array( $this->id ) )
 		->where( 'item_id = ?', array( $item_id ) );
 
-		# Get the tour item
-		$tourItem = $tiTable->fetchObject( $select );
+		# Get the landmark item
+		$landmarkItem = $tiTable->fetchObject( $select );
 
 		# Renumber any ordinals greater than it.
 		$select = $tiTable->getSelect();
-		$select->where( 'tour_id = ?', array( $this->id ) )
-		->where( 'ordinal > ?', array( $tourItem->ordinal ) );
+		$select->where( 'landmark_id = ?', array( $this->id ) )
+		->where( 'ordinal > ?', array( $landmarkItem->ordinal ) );
 
 		# Delete this linkage
-		$tourItem->delete();
+		$landmarkItem->delete();
 
 		# Reorder the remaining linkages
 		$renumbers = $tiTable->fetchObjects( $select );
@@ -93,63 +93,63 @@ class Tour extends Omeka_Record_AbstractRecord implements Zend_Acl_Resource_Inte
 
 		# Get the next ordinal
 		$db = get_db();
-		$tiTable = $db->getTable( 'TourItem' );
+		$tiTable = $db->getTable( 'LandmarkItem' );
 		$select = $tiTable->getSelectForCount();
-		$select->where( 'tour_id = ?', array( $this->id ) );
+		$select->where( 'landmark_id = ?', array( $this->id ) );
 		if($ordinal === null) {
 			$ordinal = $tiTable->fetchOne( $select );
 		}
 
-		# Create, assign, and save the new tour item connection
-		$tourItem = new TourItem;
-		$tourItem->tour_id = $this->id;
-		$tourItem->item_id = $item_id;
-		$tourItem->ordinal = $ordinal;
-		$tourItem->save();
+		# Create, assign, and save the new landmark item connection
+		$landmarkItem = new LandmarkItem;
+		$landmarkItem->landmark_id = $this->id;
+		$landmarkItem->item_id = $item_id;
+		$landmarkItem->ordinal = $ordinal;
+		$landmarkItem->save();
 	}
 
-	public function saveItemOrder( $tour_id ) {
+	public function saveItemOrder( $landmark_id ) {
 
 	}
 
-	public function hoistItem( $tour_id, $item_id )
+	public function hoistItem( $landmark_id, $item_id )
 	{
-		$this->swapItem( $tour_id, $item_id, true );
+		$this->swapItem( $landmark_id, $item_id, true );
 	}
 
-	public function lowerItem( $tour_id, $item_id )
+	public function lowerItem( $landmark_id, $item_id )
 	{
-		$this->swapItem( $tour_id, $item_id, false );
+		$this->swapItem( $landmark_id, $item_id, false );
 	}
 
-	public function setItemOrdinal( $tour_id, $item_id, $ordinal ) {
+	public function setItemOrdinal( $landmark_id, $item_id, $ordinal ) {
 		$db = get_db();
-		$tiTable = $db->getTable( 'TourItem' );
+		$tiTable = $db->getTable( 'LandmarkItem' );
 
 		// Get the target item
 		$select = $tiTable->getSelect()
-		->where( 'tour_id = ?', $tour_id )
+		->where( 'landmark_id = ?', $landmark_id )
 		->where( 'item_id = ?', $item_id );
 		$item = $tiTable->fetchObject( $select );
 		$item->ordinal = $ordinal;
 		$item->save();
 	}
 
-	public function swapItem( $tour_id, $item_id, $up )
+	public function swapItem( $landmark_id, $item_id, $up )
 	{
 		$db = get_db();
-		$tiTable = $db->getTable( 'TourItem' );
+		$tiTable = $db->getTable( 'LandmarkItem' );
 
 		// Get the target item
 		$select = $tiTable->getSelect()
-		->where( 'tour_id = ?', $tour_id )
+		->where( 'landmark_id = ?', $landmark_id )
 		->where( 'item_id = ?', $item_id );
 		$left = $tiTable->fetchObject( $select );
 		$ordinal = intval( $left->ordinal );
 
 		// Get the next item with which we are swapping
 		$select = $tiTable->getSelect()
-		->where( 'tour_id = ?', $tour_id )
+		->where( 'landmark_id = ?', $landmark_id )
 		->where( $up ? 'ordinal < ?' : 'ordinal > ?', $ordinal )
 		->limit( 1 );
 		$right = $tiTable->fetchObject( $select );
@@ -166,22 +166,22 @@ class Tour extends Omeka_Record_AbstractRecord implements Zend_Acl_Resource_Inte
 	protected function _validate()
 	{
 		if( empty( $this->title ) ) {
-			$this->addError( 'title', 'Tour must be given a title.' );
+			$this->addError( 'title', 'Landmark must be given a title.' );
 		}
 
 		if( strlen( $this->title > 255 ) ) {
-			$this->addError( 'title', 'Title for a tour must be 255 characters or fewer.' );
+			$this->addError( 'title', 'Title for a landmark must be 255 characters or fewer.' );
 		}
 		if (!$this->fieldIsUnique('title')) {
-			$this->addError('title', 'The Title is already in use by another tour. Please choose another.');
+			$this->addError('title', 'The Title is already in use by another landmark. Please choose another.');
 		}
 
 		if( strlen( $this->slug > 30 ) ) {
-			$this->addError( 'slug', 'Slug for a tour must be 30 characters or fewer.' );
+			$this->addError( 'slug', 'Slug for a landmark must be 30 characters or fewer.' );
 		}
 
-		if( !empty($this->tour_image) && !is_array(getimagesize( $this->tour_image )) ){
-			$this->addError('tour_image','The text entered does not validate as an image URL.');
+		if( !empty($this->landmark_image) && !is_array(getimagesize( $this->landmark_image )) ){
+			$this->addError('landmark_image','The text entered does not validate as an image URL.');
 		}
 
 		if( empty( $this->slug ) ) {
@@ -204,11 +204,11 @@ class Tour extends Omeka_Record_AbstractRecord implements Zend_Acl_Resource_Inte
 
 				$this->slug= $title;
 			}else{
-				$this->addError( 'slug', 'Tour must be given a slug.' );
+				$this->addError( 'slug', 'Landmark must be given a slug.' );
 			}
 		}
 		if (!$this->fieldIsUnique('slug')) {
-			$this->addError('slug', 'The slug is already in use by another tour. Please choose another.');
+			$this->addError('slug', 'The slug is already in use by another landmark. Please choose another.');
 		}
 	}
 }

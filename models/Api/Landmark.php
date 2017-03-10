@@ -1,12 +1,12 @@
 <?php
 /**
  */
-class Api_Tour extends Omeka_Record_Api_AbstractRecordAdapter
+class Api_Landmark extends Omeka_Record_Api_AbstractRecordAdapter
 {
     /**
-     * Get the REST representation of a tour.
+     * Get the REST representation of a landmark.
      * 
-     * @param Tour $record
+     * @param Landmark $record
      * @return array
      */
     public function getRepresentation(Omeka_Record_AbstractRecord $record)
@@ -14,42 +14,42 @@ class Api_Tour extends Omeka_Record_Api_AbstractRecordAdapter
 
         $db = get_db();
 
-        $tiTable = $db->getTable( 'TourItem' );
+        $tiTable = $db->getTable( 'LandmarkItem' );
         $glTable = $db->getTable( 'Location' );
 
         $tiSelect = $tiTable->getSelect();
-        $tiSelect->where( 'tour_id = ?', array( $record->id ) );
+        $tiSelect->where( 'landmark_id = ?', array( $record->id ) );
 
-        # Get the tour items
-        $tourItems = $tiTable->fetchObjects( $tiSelect );
+        # Get the landmark items
+        $landmarkItems = $tiTable->fetchObjects( $tiSelect );
 
         $glSelect = $glTable->getSelect();
-        $glSelect->where( 'item_id = ?', array( $tourItems[0]->item_id ) );
+        $glSelect->where( 'item_id = ?', array( $landmarkItems[0]->item_id ) );
         $geolocations = $glTable->fetchObjects( $glSelect );
         $startLocation = $geolocations[0];
 
-        #map tour items to items
-        $generator = function($tourItem){
+        #map landmark items to items
+        $generator = function($landmarkItem){
             $result = array(
-                'id' => $tourItem->item_id,
-                'url' => $this->getResourceUrl("/items/{$tourItem->item_id}"),
+                'id' => $landmarkItem->item_id,
+                'url' => $this->getResourceUrl("/items/{$landmarkItem->item_id}"),
                 'resource' => 'items'
             );
             return $result;
         };
 
-        $items = array_map($generator,$tourItems);
+        $items = array_map($generator,$landmarkItems);
 
         $representation = array(
             'id' => $record->id,
-            'url' => $this->getResourceUrl("/tours/{$record->id}"),
+            'url' => $this->getResourceUrl("/landmarks/{$record->id}"),
             'title' => $record->title,
             'description' => $record->description,
             'credits' => $record->credits,
             'public' => $record->public,
             'slug' => $record->slug,
             'postscript_text' => $record->postscript_text,
-            'tour_image' => $record->tour_image,
+            'landmark_image' => $record->landmark_image,
             'items' => $items,
             'start' => $startLocation
         );

@@ -1,79 +1,79 @@
 <?php
-$tourTitle = strip_formatting( tour( 'title' ) );
-if( $tourTitle != '' && $tourTitle != '[Untitled]' ) {
-	$tourTitle = ': &quot;' . $tourTitle . '&quot; ';
+$landmarkTitle = strip_formatting( landmark( 'title' ) );
+if( $landmarkTitle != '' && $landmarkTitle != '[Untitled]' ) {
+	$landmarkTitle = ': &quot;' . $landmarkTitle . '&quot; ';
 } else {
-	$tourTitle = '';
+	$landmarkTitle = '';
 }
-$tourTitle = 'Tour #' . tour( 'id' ) . $tourTitle;
+$landmarkTitle = 'Landmark #' . landmark( 'id' ) . $landmarkTitle;
 
-echo head( array( 'title' => $tourTitle,
-		'bodyclass' => 'show','bodyid'=>'tour' ) );
+echo head( array( 'title' => $landmarkTitle,
+		'bodyclass' => 'show','bodyid'=>'landmark' ) );
 echo flash();
 ?>
 
 <section class="seven columns alpha">
 
-  <?php if( metadata( 'tour', 'Title' ) ): ?>
-  <div id="tour-title" class="element">
+  <?php if( metadata( 'landmark', 'Title' ) ): ?>
+  <div id="landmark-title" class="element">
     <h2>Title</h2>
     <div class="element-text">
-      <?php echo nls2p( metadata( 'tour', 'Title' ) ); ?>
+      <?php echo nls2p( metadata( 'landmark', 'Title' ) ); ?>
     </div>
   </div>
   <?php endif; ?>
 
-  <?php if( $tour->slug ): ?>
-  <div id="tour-slug" class="element hidden">
+  <?php if( $landmark->slug ): ?>
+  <div id="landmark-slug" class="element hidden">
     <h2>Slug</h2>
     <div class="element-text">
-      <?php echo tour( 'Slug' ); ?>
+      <?php echo landmark( 'Slug' ); ?>
     </div>
   </div>
   <?php endif; ?>
 
-  <?php if( metadata( 'tour', 'Credits' ) ): ?>
-  <div id="tour-credits" class="element">
+  <?php if( metadata( 'landmark', 'Credits' ) ): ?>
+  <div id="landmark-credits" class="element">
     <h2>Credits</h2>
     <div class="element-text">
-      <?php echo metadata( 'tour', 'Credits' ); ?>
+      <?php echo metadata( 'landmark', 'Credits' ); ?>
     </div>
   </div>
   <?php endif; ?>
 
-  <?php if( metadata( 'tour', 'Description' ) ): ?>
-  <div id="tour-description" class="element">
+  <?php if( metadata( 'landmark', 'Description' ) ): ?>
+  <div id="landmark-description" class="element">
     <h2>Description</h2>
     <div class="element-text">
-      <?php echo nls2p( metadata( 'tour', 'Description' ) ); ?>
+      <?php echo nls2p( metadata( 'landmark', 'Description' ) ); ?>
     </div>
   </div>
   <?php endif; ?>
 
-  <?php if( metadata( 'tour', 'postscript_text' ) ): ?>
+  <?php if( metadata( 'landmark', 'postscript_text' ) ): ?>
   <div id="postscript_text" class="element">
     <h2>Postscript Text</h2>
     <div class="element-text">
-      <?php echo '<em>'.htmlspecialchars_decode(metadata( 'tour', 'postscript_text' )).'</em>'; ?>
+      <?php echo '<em>'.htmlspecialchars_decode(metadata( 'landmark', 'postscript_text' )).'</em>'; ?>
     </div>
   </div>
   <?php endif; ?>
 
-  <?php if( metadata( 'tour', 'tour_image' ) ): ?>
+  <?php if( metadata( 'landmark', 'landmark_image' ) ): ?>
 <!--
-  <div id="tour_image" class="element">
-    <h2>Tour Image</h2>
+  <div id="landmark_image" class="element">
+    <h2>Landmark Image</h2>
     <div class="element-text">
-      <?php echo '<img src="'.metadata( 'tour', 'tour_image' ).'" style="max-width:100%;height:auto;">'; ?>
+      <?php echo '<img src="'.metadata( 'landmark', 'landmark_image' ).'" style="max-width:100%;height:auto;">'; ?>
     </div>
   </div>
 -->
   <?php endif; ?>  
   
   <?php
-$items = $tour->getItems();
-if( $tour->getItems() ): ?>
-  <div id="tour-items" class="element">
+$items = $landmark->getItems();
+if( $landmark->getItems() ): ?>
+  <div id="landmark-items" class="element">
     <h2>Items</h2>
     <div class="element-text">
       <ul>
@@ -93,20 +93,20 @@ if( $tour->getItems() ): ?>
 
 <section class="three columns omega">
   <div id="edit" class="panel">
-    <?php if( is_allowed( 'TourBuilder_Tours', 'edit' ) ): ?>
-    <a href="<?php echo url( array( 'action' => 'edit', 'id' => $tour->id ) ); ?>"
+    <?php if( is_allowed( 'Landmarks', 'edit' ) ): ?>
+    <a href="<?php echo url( array( 'action' => 'edit', 'id' => $landmark->id ) ); ?>"
        class="edit big green button">
       <?php echo __('Edit'); ?>
     </a>
     <?php endif; ?>
 
-    <a href="<?php echo html_escape( public_url( 'tours/show/' . $tour->id ) ); ?>"
+    <a href="<?php echo html_escape( public_url( 'landmarks/show/' . $landmark->id ) ); ?>"
        class="big blue button" target="_blank">
       <?php echo __('View Public Page'); ?>
     </a>
 
-    <?php if( is_allowed( 'TourBuilder_Tours', 'delete' ) ): ?>
-    <?php echo link_to_tour( __('Delete'),
+    <?php if( is_allowed( 'Landmarks', 'delete' ) ): ?>
+    <?php echo link_to_landmark( __('Delete'),
 		array( 'class' => 'big red button' ),
 		'delete-confirm' ); ?>
     <?php endif; ?>
@@ -117,13 +117,13 @@ if( $tour->getItems() ): ?>
       <span class="label">
         <?php echo __('Public'); ?>:
       </span>
-      <?php echo ($tour->public) ? __('Yes') : __('No'); ?>
+      <?php echo ($landmark->public) ? __('Yes') : __('No'); ?>
     </p>
     <p>
       <span class="label">
         <?php echo __('Featured'); ?>:
       </span>
-      <?php echo ($tour->featured) ? __('Yes') : __('No'); ?>
+      <?php echo ($landmark->featured) ? __('Yes') : __('No'); ?>
     </p>
   </div>
 </section>
