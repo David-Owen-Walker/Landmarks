@@ -98,7 +98,7 @@ class LandmarksPlugin extends Omeka_Plugin_AbstractPlugin
 	{
 		$router = $args['router'];
 		$router->addConfig( new Zend_Config_Ini(
-				LANDMARKBUILDER_PLUGIN_DIR .
+				LANDMARKS_PLUGIN_DIR .
 				DIRECTORY_SEPARATOR .
 				'routes.ini', 'routes' ) );
 	}
