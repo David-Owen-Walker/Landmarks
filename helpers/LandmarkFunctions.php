@@ -101,7 +101,7 @@ function total_landmarks()
 	return count( $view->landmarks );
 }
 
-function nls2p($str) {
+function what_is_this_function($str) {
 	$str = str_replace('<p></p>', '', '<p>'
 		. preg_replace('#([
 ]\s*?[
