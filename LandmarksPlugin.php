@@ -1,8 +1,8 @@
 <?php
 
-if( !defined( 'TOURBUILDER_PLUGIN_DIR' ) )
+if( !defined( 'LANDMARKBUILDER_PLUGIN_DIR' ) )
 {
-	define( 'TOURBUILDER_PLUGIN_DIR', dirname( __FILE__ ) );
+	define( 'LANDMARKBUILDER_PLUGIN_DIR', dirname( __FILE__ ) );
 }
 
 class LandmarkBuilderPlugin extends Omeka_Plugin_AbstractPlugin
@@ -98,7 +98,7 @@ class LandmarkBuilderPlugin extends Omeka_Plugin_AbstractPlugin
 	{
 		$router = $args['router'];
 		$router->addConfig( new Zend_Config_Ini(
-				TOURBUILDER_PLUGIN_DIR .
+				LANDMARKBUILDER_PLUGIN_DIR .
 				DIRECTORY_SEPARATOR .
 				'routes.ini', 'routes' ) );
 	}
