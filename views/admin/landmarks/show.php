@@ -18,7 +18,7 @@ echo flash();
   <div id="landmark-title" class="element">
     <h2>Title</h2>
     <div class="element-text">
-      <?php echo nls2p( metadata( 'landmark', 'Title' ) ); ?>
+      <?php echo what_is_this_function( metadata( 'landmark', 'Title' ) ); ?>
     </div>
   </div>
   <?php endif; ?>
@@ -45,7 +45,7 @@ echo flash();
   <div id="landmark-description" class="element">
     <h2>Description</h2>
     <div class="element-text">
-      <?php echo nls2p( metadata( 'landmark', 'Description' ) ); ?>
+      <?php echo what_is_this_function( metadata( 'landmark', 'Description' ) ); ?>
     </div>
   </div>
   <?php endif; ?>
