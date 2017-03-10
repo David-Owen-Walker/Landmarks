@@ -1,31 +1,31 @@
 <?php
-$tourTitle = strip_formatting( tour( 'title' ) );
-if( $tourTitle != '' && $tourTitle != '[Untitled]' ) {
-	$tourTitle = ': &quot;' . $tourTitle . '&quot; ';
+$landmarkTitle = strip_formatting( landmark( 'title' ) );
+if( $landmarkTitle != '' && $landmarkTitle != '[Untitled]' ) {
+	$landmarkTitle = ': &quot;' . $landmarkTitle . '&quot; ';
 } else {
-	$tourTitle = '';
+	$landmarkTitle = '';
 }
-$tourTitle = 'Edit Tour #' . tour( 'id' ) . $tourTitle;
+$landmarkTitle = 'Edit Landmark #' . landmark( 'id' ) . $landmarkTitle;
 
-echo head( array( 'title' => $tourTitle, 'content_class' => 'vertical-nav',
-		'bodyclass' => 'edit','bodyid'=>'tour' ) );
+echo head( array( 'title' => $landmarkTitle, 'content_class' => 'vertical-nav',
+		'bodyclass' => 'edit','bodyid'=>'landmark' ) );
 include 'form-tabs.php';
 echo flash();
 ?>
 
-<form method="post" enctype="multipart/form-data" id="tour-form" action="">
+<form method="post" enctype="multipart/form-data" id="landmark-form" action="">
   <?php include "form.php" ?>
 
-  <section class="three columns omega" id="tour-editor-control-panel">
+  <section class="three columns omega" id="landmark-editor-control-panel">
 	<div id="save" class="panel">
 	  <?php echo $this->formSubmit( 'submit', __('Save Changes'),
 	array( 'id' => 'save-changes',
 		'class' => 'submit big green button' ) ); ?>
-      <a href="<?php echo html_escape( public_url( 'tours/show/' . $tour->id ) ); ?>"
+      <a href="<?php echo html_escape( public_url( 'landmarks/show/' . $landmark->id ) ); ?>"
          class="big blue button" target="_blank">
         <?php echo __('View Public Page'); ?>
       </a>
-      <?php echo link_to_tour( __('Delete'),
+      <?php echo link_to_landmark( __('Delete'),
 	array( 'class' => 'delete-confirm big red button' ),
 	'delete-confirm' ); ?>
     </div>
@@ -34,27 +34,27 @@ echo flash();
 
 
     <div id="public-featured">
-      <?php if ( is_allowed('TourBuilder_Tours', 'makePublic') ): ?>
+      <?php if ( is_allowed('LandmarkBuilder_Landmarks', 'makePublic') ): ?>
       <div class="checkbox">
         <label for="public">
           <?php echo __('Public'); ?>:
         </label>
         <div class="checkbox">
           <?php echo $this->formCheckbox(
-	'public', $tour->public,
+	'public', $landmark->public,
 	array(), array( '1', '0' ) ); ?>
         </div>
       </div>
       <?php endif; ?>
 
-      <?php if( is_allowed( 'TourBuilder_Tours', 'makeFeatured' ) ): ?>
+      <?php if( is_allowed( 'LandmarkBuilder_Landmarks', 'makeFeatured' ) ): ?>
       <div class="checkbox">
         <label for="featured">
           <?php echo __('Featured'); ?>:
         </label>
         <div class="checkbox">
           <?php echo $this->formCheckbox(
-	'featured', $tour->featured,
+	'featured', $landmark->featured,
 	array(), array( '1', '0' ) ); ?>
         </div>
       </div>
@@ -63,7 +63,7 @@ echo flash();
 
     </div>
     
-    <?php //if($tour->hasImage('square_thumbnails')) {echo $tour->square_thumbnail();} ?>
+    <?php //if($landmark->hasImage('square_thumbnails')) {echo $landmark->square_thumbnail();} ?>
 
   </section>
 

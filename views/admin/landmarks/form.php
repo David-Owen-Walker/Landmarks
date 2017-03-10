@@ -32,7 +32,7 @@ jQuery(document).bind('omeka:elementformload', function (event) {
 <section class="seven columns alpha" id="edit-form">
   <?php echo flash(); ?>
 
-  <div id="tour-metadata">
+  <div id="landmark-metadata">
     <?php foreach( $tabs as $tabName => $tabContent ): ?>
     <?php if( !empty( $tabContent ) ): ?>
     <div id="<?php echo text_to_id( html_escape( $tabName ) ); ?>-metadata">

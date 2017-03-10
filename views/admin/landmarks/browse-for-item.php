@@ -1,19 +1,19 @@
 <?php
 /*
-$tourTitle = strip_formatting( tour( 'title' ) );
-if( $tourTitle != '' && $tourTitle != '[Untitled]' )
+$landmarkTitle = strip_formatting( landmark( 'title' ) );
+if( $landmarkTitle != '' && $landmarkTitle != '[Untitled]' )
 {
-   $tourTitle = ': &quot;' . $tourTitle . '&quot; ';
+   $landmarkTitle = ': &quot;' . $landmarkTitle . '&quot; ';
 }
 else
 {
-   $tourTitle = '';
+   $landmarkTitle = '';
 }
-$tourTitle = 'Add Item To Tour #' . tour( 'id' ) . $tourTitle;
+$landmarkTitle = 'Add Item To Landmark #' . landmark( 'id' ) . $landmarkTitle;
 
-echo head( array( 'title' => $tourTitle,
+echo head( array( 'title' => $landmarkTitle,
                   'content_class' => 'vertical-nav',
-                  'bodyclass' => 'tours primary' ) );
+                  'bodyclass' => 'landmarks primary' ) );
                   */
 
 /*
@@ -37,7 +37,7 @@ echo head( array( 'title' => $tourTitle,
                                       'id' => $item->id ), 'id' );
                $addUrl = url( array( 'action' => 'addItem',
                                      'item' => $item->id,
-                                     'id' => $tour->id ), 'tourItemAction' );
+                                     'id' => $landmark->id ), 'landmarkItemAction' );
       ?>
 
       <tr class="items <?php echo $oddness; ?>">
@@ -49,7 +49,7 @@ echo head( array( 'title' => $tourTitle,
          </td>
          <td scope="row">
             <a class="add" href="<?php echo $addUrl; ?>">
-              <?php echo __('Add to tour'); ?>
+              <?php echo __('Add to landmark'); ?>
             </a>
          </td>
       </tr>

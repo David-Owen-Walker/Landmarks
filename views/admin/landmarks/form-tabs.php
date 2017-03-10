@@ -1,12 +1,12 @@
 <?php
 $tabs = array();
-$theTabs= (!$tour->id) ? array( 'Tour Info' ) : array( 'Tour Info','Items' );
+$theTabs= (!$landmark->id) ? array( 'Landmark Info' ) : array( 'Landmark Info','Items' );
 foreach( $theTabs as $tabName )
 {
 	ob_start();
 	switch( $tabName )
 	{
-	case 'Tour Info':
+	case 'Landmark Info':
 		require 'metadata-form.php';
 		break;
 	case 'Items':
