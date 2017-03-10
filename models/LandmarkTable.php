@@ -53,10 +53,10 @@ class LandmarkTable extends Omeka_Db_Table
 		return $items;
 	}
 
-//	public function getSelect()
-//	{
-//		return $this->getTable( 'Item' )->getSelect();
-//	}
+	public function getSelect()
+	{
+		return $this->getTable( 'Item' )->getSelect();
+	}
 	public function getSelectForFindBy($params = array())
     	{
         	$select = $this->getSelect();
