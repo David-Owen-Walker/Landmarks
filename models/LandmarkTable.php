@@ -57,22 +57,15 @@ class LandmarkTable extends Omeka_Db_Table
 		return $items;
 	}
 
-	public function getSelect()
-	{
-//		$select = get_db()->Items->getSelect();
-        $select = parent::getSelect();
-
-		$permissions = new Omeka_Db_Select_PublicPermissions( 'Landmarks' );
-		$permissions->apply( $select, 'landmarks', null );
-
-		if( ! is_allowed( 'Landmarks', 'show-unpublished' ) )
-		{
-			// Determine public level TODO: May be outdated
-			$select->where( $this->getTableAlias() . '.public = 1' );
-		}
-
-		return $select;
-	}
+//	public function getSelect()
+//	{
+////		$select = get_db()->Items->getSelect();
+//        $select = parent::getSelect();
+//
+//		$permissions = new Omeka_Db_Select_PublicPermissions( 'Landmarks' );
+//		$permissions->apply( $select, 'landmarks', null );
+//		return $select;
+//	}
 	public function getSelectForFindBy($params = array())
     	{
         	$select = $this->getSelect();
