@@ -8,7 +8,7 @@ class LandmarkTable extends Omeka_Db_Table
         if ($name) {
             $this->_name = (string) $name;
         } else {
-            $this->_name = 'Item';
+            $this->_name = 'items';
         }
     }
     
