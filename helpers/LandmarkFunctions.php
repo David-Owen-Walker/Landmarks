@@ -150,7 +150,7 @@ function display_landmark_thumb($landmark,$i,$userDefined=null){
 
 	}else{
 		// use the fallback if their are no items in the landmark
-		$html .= '<img src="'.public_url('plugins/LandmarkBuilder/views/public/images/default_thumbnail.png').'"/>';
+		$html .= '<img src="'.public_url('plugins/Landmarks/views/public/images/default_thumbnail.png').'"/>';
 	}
 
 	$html .= '</a></div>';

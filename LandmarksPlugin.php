@@ -1,11 +1,11 @@
 <?php
 
-if( !defined( 'LANDMARKBUILDER_PLUGIN_DIR' ) )
+if( !defined( 'LANDMARKS_PLUGIN_DIR' ) )
 {
-	define( 'LANDMARKBUILDER_PLUGIN_DIR', dirname( __FILE__ ) );
+	define( 'LANDMARKS_PLUGIN_DIR', dirname( __FILE__ ) );
 }
 
-class LandmarkBuilderPlugin extends Omeka_Plugin_AbstractPlugin
+class LandmarksPlugin extends Omeka_Plugin_AbstractPlugin
 {
 	protected $_filters = array(
 	        'api_resources',
@@ -151,7 +151,7 @@ class LandmarkBuilderPlugin extends Omeka_Plugin_AbstractPlugin
 		$html .= '<section class="five columns alpha"><div class="panel">';
 		$html .= '<h2>'.__('Recent Landmarks').'</h2>';
 		$html .= ''.$landmarkItems.'';
-		$html .= '<p><a class="add-new-item" href="'.html_escape(url('landmark-builder/landmarks/add/')).'">'.__('Add a new landmark').'</a></p>';
+		$html .= '<p><a class="add-new-item" href="'.html_escape(url('landmarks/landmarks/add/')).'">'.__('Add a new landmark').'</a></p>';
 		$html .= '</div></section>';
 
 		echo $html;

@@ -9,7 +9,7 @@ $addItemUrl = $this->url(
   <?php echo __('Press save to submit changes to the item list.'); ?>
 </p>
 
-<ul id="landmarkbuilder-item-list">
+<ul id="landmarks-item-list">
     <div id="landmark-items-table-container">
   <table id="landmark-items" class="simple" cellspacing="0" cellpadding="0">
     <thead>
@@ -74,12 +74,12 @@ $itemDelete = $this->url( array( 'action' => 'removeItem',
     </div>
 </ul>
 
-<div id="landmarkbuilder-additem">
+<div id="landmarks-additem">
   <a class="submit button blue" href="<?php echo $addItemUrl; ?>" onclick="" id="add-item-link">
     <?php echo __('Add Item'); ?>
   </a>
 </div>
-<div id="landmarkbuilder-cancelitem">
+<div id="landmarks-cancelitem">
     <a class="submit blue button" href="#" id="cancel-item-link">
         <?php echo __('Cancel'); ?>
     </a>
@@ -170,7 +170,7 @@ $itemDelete = $this->url( array( 'action' => 'removeItem',
         $.bindSortable();
 
         // Hide the cancel button by default
-        $("#landmarkbuilder-cancelitem").hide();
+        $("#landmarks-cancelitem").hide();
 
         // Function that displays the dot in an
         // incrementing fashion
@@ -194,8 +194,8 @@ $itemDelete = $this->url( array( 'action' => 'removeItem',
         // Function to set the status text above the dot
         $.setStatus = function(statusText) {
             $("input[name='statusText']").val(statusText);
-            $("#landmarkbuilder-cancelitem").hide();
-            $("#landmarkbuilder-additem").hide();
+            $("#landmarks-cancelitem").hide();
+            $("#landmarks-additem").hide();
             $("#landmark-items").hide();
             $("#save-notice").hide();
             $("table#items").hide();
@@ -226,7 +226,7 @@ $itemDelete = $this->url( array( 'action' => 'removeItem',
 
 
             $("#landmark-items").hide();
-            $("#landmarkbuilder-cancelitem").show();
+            $("#landmarks-cancelitem").show();
             $(this).hide();
 
             $.setH2("Items &mdash; Select an item");
@@ -265,7 +265,7 @@ $itemDelete = $this->url( array( 'action' => 'removeItem',
                 var tbody = document.createElement("tbody");
                 newTable.appendChild(tbody);
 
-                $("#landmarkbuilder-item-list").append(newTable);
+                $("#landmarks-item-list").append(newTable);
                 $(newTable).addClass("simple");
             }
 
@@ -304,18 +304,18 @@ $itemDelete = $this->url( array( 'action' => 'removeItem',
             $("#save-notice").show();
             $("#landmark-items").show();
             $("h2#action-title").html("Items");
-            $("#landmarkbuilder-additem").show();
+            $("#landmarks-additem").show();
             $("#disable-placeholder").remove();
-            $("#landmarkbuilder-cancelitem").hide();
+            $("#landmarks-cancelitem").hide();
             $("#primary").remove();
             $("table#items").remove();
             $("#add-item-link").show();
-            $("#landmarkbuilder-cancelitem a").html("Cancel");
+            $("#landmarks-cancelitem a").html("Cancel");
         });
 
         $.cancelItemAdd = function () {
             $("#landmark-items").hide();
-            $("#landmarkbuilder-additem").html("");
+            $("#landmarks-additem").html("");
             $("#save-notice").show();
         };
 
@@ -345,7 +345,7 @@ $itemDelete = $this->url( array( 'action' => 'removeItem',
                     // in the landmark
                     $.allLandmarkItems[i].in_landmark = 1;
                     $("table#items tr[add-row-id='" + itemId + "']").fadeOut();
-                    $("#landmarkbuilder-cancelitem a").html("Done");
+                    $("#landmarks-cancelitem a").html("Done");
                 }
             }
             $.styleTRs();
@@ -366,7 +366,7 @@ $itemDelete = $this->url( array( 'action' => 'removeItem',
             $.setStatus("Refreshing landmark items");
             $("#landmark-items-table-container").load($(location).attr('pathname') + " #landmark-items", function () {
                 $.hideStatus();
-                $("#landmarkbuilder-additem").show();
+                $("#landmarks-additem").show();
                 $("#disable-placeholder").remove();
                 $.bindDownClicks();
                 $.bindHoistClicks();
