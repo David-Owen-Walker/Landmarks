@@ -4,49 +4,49 @@
  * Helper functions
  */
 
-function has_tours()
+function has_landmarks()
 {
-	return( total_tours() > 0 );
+	return( total_landmarks() > 0 );
 }
 
-function has_tours_for_loop()
+function has_landmarks_for_loop()
 {
 	$view = get_view();
-	return $view->tours && count( $view->tours );
+	return $view->landmarks && count( $view->landmarks );
 }
 
 
-function tour( $fieldName, $options=array(), $tour=null )
+function landmark( $fieldName, $options=array(), $landmark=null )
 {
-	if( ! $tour ) {
-		$tour = get_current_tour();
+	if( ! $landmark ) {
+		$landmark = get_current_landmark();
 	}
 
 	switch( strtolower( $fieldName ) ) {
 	case 'id':
-		$text = $tour->id;
+		$text = $landmark->id;
 		break;
 	case 'title':
-		$text = $tour->title;
+		$text = $landmark->title;
 		break;
 	case 'description':
-		$text = $tour->description;
+		$text = $landmark->description;
 		break;
 	case 'credits':
-		$text = $tour->credits;
+		$text = $landmark->credits;
 		break;
 	case 'slug':
-		$text = $tour->slug;
+		$text = $landmark->slug;
 		break;
 	case 'postscript_text':
-		$text = $tour->postscript_text;
+		$text = $landmark->postscript_text;
 		break;
-	case 'tour_image':
-		$text = $tour->tour_image;
+	case 'landmark_image':
+		$text = $landmark->landmark_image;
 		break;
 
 	default:
-		throw new Exception( "\"$fieldName\" does not exist for tours!" );
+		throw new Exception( "\"$fieldName\" does not exist for landmarks!" );
 		break;
 	}
 
@@ -67,38 +67,38 @@ function tour( $fieldName, $options=array(), $tour=null )
 	return $text;
 }
 
-function set_current_tour( $tour )
+function set_current_landmark( $landmark )
 {
-	get_view()->tour = $tour;
+	get_view()->landmark = $landmark;
 }
 
-function get_current_tour()
+function get_current_landmark()
 {
-	return get_view()->tour;
+	return get_view()->landmark;
 }
 
-function link_to_tour(
-	$text=null, $props=array(), $action='show', $tourObj = null )
+function link_to_landmark(
+	$text=null, $props=array(), $action='show', $landmarkObj = null )
 {
-	# Use the current tour object if none given
-	if( ! $tourObj ) {
-		$tourObj = get_current_tour();
+	# Use the current landmark object if none given
+	if( ! $landmarkObj ) {
+		$landmarkObj = get_current_landmark();
 	}
 
 	# Create default text, if it was not passed in.
 	if( empty( $text ) ) {
-		$tourName = tour('title', array(), $tourObj);
-		$text = (! empty( $tourName )) ? $tourName : '[Untitled]';
+		$landmarkName = landmark('title', array(), $landmarkObj);
+		$text = (! empty( $landmarkName )) ? $landmarkName : '[Untitled]';
 	}
 
-	return link_to($tourObj, $action, $text, $props);
+	return link_to($landmarkObj, $action, $text, $props);
 }
 
 
-function total_tours()
+function total_landmarks()
 {
 	$view = get_view();
-	return count( $view->tours );
+	return count( $view->landmarks );
 }
 
 function nls2p($str) {
@@ -110,7 +110,7 @@ function nls2p($str) {
 	return $str;
 }
 
-function public_nav_tours( array $navArray = null, $maxDepth = 0 )
+function public_nav_landmarks( array $navArray = null, $maxDepth = 0 )
 {
 	if( !$navArray )
 	{
@@ -118,9 +118,9 @@ function public_nav_tours( array $navArray = null, $maxDepth = 0 )
 
 		$navArray[] = array(
 			'label' => __('All'),
-			'uri' => url('tours/browse') );
+			'uri' => url('landmarks/browse') );
 
-		/* TODO: Tour Tags */
+		/* TODO: Landmark Tags */
 
 	}
 
@@ -128,29 +128,29 @@ function public_nav_tours( array $navArray = null, $maxDepth = 0 )
 }
 
 /*
-** Display the thumb for the tour.
+** Display the thumb for the landmark.
 ** Used to generate slideshow, etc.
-** TODO: expand $userDefined option to encompass either a user-set globally-defined img URL or a user-set tour-specific img URL
-** USAGE: display_tour_thumb($this->tour,0)
+** TODO: expand $userDefined option to encompass either a user-set globally-defined img URL or a user-set landmark-specific img URL
+** USAGE: display_landmark_thumb($this->landmark,0)
 */
-function display_tour_thumb($tour,$i,$userDefined=null){
+function display_landmark_thumb($landmark,$i,$userDefined=null){
 
-	$firstTourItem=tour_item_id($tour,$i);
+	$firstLandmarkItem=landmark_item_id($landmark,$i);
 
 	$html='<div class="item-thumb hidden">';
-	$html .= '<a href="'.html_escape(public_url('tours/show/'.tour('id'))).'">';
+	$html .= '<a href="'.html_escape(public_url('landmarks/show/'.landmark('id'))).'">';
 
 	if($userDefined){
 		$html .= '<img src="'.$userDefined.'"/>';
 
-	}elseif($firstTourItem){
-		// use the thumb for the first item in the tour
-		$item = get_record_by_id('item', $firstTourItem);
+	}elseif($firstLandmarkItem){
+		// use the thumb for the first item in the landmark
+		$item = get_record_by_id('item', $firstLandmarkItem);
 		$html .= item_image('square_thumbnail',array(),0,$item);
 
 	}else{
-		// use the fallback if their are no items in the tour
-		$html .= '<img src="'.public_url('plugins/TourBuilder/views/public/images/default_thumbnail.png').'"/>';
+		// use the fallback if their are no items in the landmark
+		$html .= '<img src="'.public_url('plugins/LandmarkBuilder/views/public/images/default_thumbnail.png').'"/>';
 	}
 
 	$html .= '</a></div>';
@@ -158,71 +158,71 @@ function display_tour_thumb($tour,$i,$userDefined=null){
 	return $html;
 }
 /*
-** Get an ID of an item in a tour
-** $tour sets the tour object
+** Get an ID of an item in a landmark
+** $landmark sets the landmark object
 ** $i is used to choose the position in the item array
-** USAGE: tour_item_id($this->tour,0)
+** USAGE: landmark_item_id($this->landmark,0)
 */
-function tour_item_id($tour,$i){
-	$tourItems =array();
-	foreach( $tour->Items as $items ){
-		array_push($tourItems,$items->id);
+function landmark_item_id($landmark,$i){
+	$landmarkItems =array();
+	foreach( $landmark->Items as $items ){
+		array_push($landmarkItems,$items->id);
 	}
-	return isset($tourItems[$i]) ? $tourItems[$i] : null;
+	return isset($landmarkItems[$i]) ? $landmarkItems[$i] : null;
 }
 
 /*
-** Uses the query parameters posted from the tour location links on tours/show
-** Adds a prev/info/next link to items/show for navigating tour locations
+** Uses the query parameters posted from the landmark location links on landmarks/show
+** Adds a prev/info/next link to items/show for navigating landmark locations
 */
 
-function tour_nav( $html=null, $label='Tour' )
+function landmark_nav( $html=null, $label='Landmark' )
 {
 	$intlLabel = __($label);
 
-	if ( (isset($_GET['tour'])) && (isset($_GET['index'])) )
+	if ( (isset($_GET['landmark'])) && (isset($_GET['index'])) )
 	{
 		$index = $_GET[ 'index' ];
-		$tour_id = $_GET['tour'];
-		$tour = get_record_by_id( 'tour', $tour_id );
+		$landmark_id = $_GET['landmark'];
+		$landmark = get_record_by_id( 'landmark', $landmark_id );
 
 		$prevIndex = $index -1;
 		$nextIndex = $index +1;
 
-		$tourTitle = metadata( $tour, 'title' );
-		$tourURL = html_escape( public_url( 'tours/show/'.$tour_id ) );
+		$landmarkTitle = metadata( $landmark, 'title' );
+		$landmarkURL = html_escape( public_url( 'landmarks/show/'.$landmark_id ) );
 
 		// Items
-		$current = tour_item_id( $tour, $index );
-		$next = tour_item_id( $tour, $nextIndex );
-		$prev = tour_item_id( $tour, $prevIndex );
+		$current = landmark_item_id( $landmark, $index );
+		$next = landmark_item_id( $landmark, $nextIndex );
+		$prev = landmark_item_id( $landmark, $prevIndex );
 
-		// Begin building the tour navigation
+		// Begin building the landmark navigation
 		$html = ''
-			. '<div class="tour-nav">'
+			. '<div class="landmark-nav">'
 			. "$intlLabel " . __('navigation') . ':&nbsp;&nbsp;'
-			. '<span id="tour-nav-links">';
+			. '<span id="landmark-nav-links">';
 
 		// Add the previous item to the navigation if present.
 		if( $prev )
 		{
-			$prevUrl = public_url( "items/show/$prev?tour=$tour_id&index=$prevIndex");
+			$prevUrl = public_url( "items/show/$prev?landmark=$landmark_id&index=$prevIndex");
 			$html .= ''
 				. '<a title="' . __('Previous stop on %s', $intlLabel) .'"'
 				. "href=\"$prevUrl\">" . __('Previous') . '</a>'
 				. ' | ';
 		}
 
-		if( $tourURL )
+		if( $landmarkURL )
 		{
-			$html .= '<a title= "'.__('View %1$s: %2$s', $intlLabel, $tourTitle).'"
-         href="'.$tourURL.'">'.__('%s Info', $intlLabel).'</a>';
+			$html .= '<a title= "'.__('View %1$s: %2$s', $intlLabel, $landmarkTitle).'"
+         href="'.$landmarkURL.'">'.__('%s Info', $intlLabel).'</a>';
 		}
 
 		// Add the next item to the navigation if present
 		if( $next )
 		{
-			$nextUrl = public_url( "items/show/$next?tour=$tour_id&index=$nextIndex");
+			$nextUrl = public_url( "items/show/$next?landmark=$landmark_id&index=$nextIndex");
 			$html .= ' | '
 				. '<a title="' . __('Next stop on %s', $intlLabel).'" href="'.$nextUrl.'">' . __('Next') . '</a>';
 		}
@@ -235,7 +235,7 @@ function tour_nav( $html=null, $label='Tour' )
 		. '<script>'
 			. 'jQuery( "span#close" ).click( function()'
 			. '{'
-			. '  jQuery( ".tour-nav" ).fadeOut( "fast", "linear" );'
+			. '  jQuery( ".landmark-nav" ).fadeOut( "fast", "linear" );'
 			. '});'
 			. '</script>';
 
@@ -243,27 +243,27 @@ function tour_nav( $html=null, $label='Tour' )
 	}
 }
 
-/* get a list of related tour links for a given item, for use on items/show template */
-function tours_for_item($item_id=null,$heading=null){
+/* get a list of related landmark links for a given item, for use on items/show template */
+function landmarks_for_item($item_id=null,$heading=null){
 
 	if(is_int($item_id)){
 		$db = get_db();
 		$prefix=$db->prefix;
 		$select = $db->select()
-		->from(array('ti' => $prefix.'tour_items')) // SELECT * FROM omeka_tour_items as ti
-		->join(array('t' => $prefix.'tours'),    // INNER JOIN omeka_tours as t
-			'ti.tour_id = t.id')      // ON ti.tour_id = t.id
+		->from(array('ti' => $prefix.'landmark_items')) // SELECT * FROM omeka_landmark_items as ti
+		->join(array('t' => $prefix.'landmarks'),    // INNER JOIN omeka_landmarks as t
+			'ti.landmark_id = t.id')      // ON ti.landmark_id = t.id
 		->where("item_id=$item_id AND public=1");      // WHERE item_id=$item_id
 		$q = $select->query();
 		$results = $q->fetchAll();
 
 		$html=null;
 		if($results){
-			$h=(count($results)>1) ? __('Related Tours') : __('Related Tour');
+			$h=(count($results)>1) ? __('Related Landmarks') : __('Related Landmark');
 			$h = ($heading) ? $heading : $h;
-			$html.='<div id="tour-for-item"><h3>'.$h.'</h3><ul>';
+			$html.='<div id="landmark-for-item"><h3>'.$h.'</h3><ul>';
 			foreach($results as $result){
-				$html.='<li><a class="tour-for-item" href="/tours/show/'.$result['id'].'">';
+				$html.='<li><a class="landmark-for-item" href="/landmarks/show/'.$result['id'].'">';
 				$html.=$result['title'];
 				$html.='</a></li>';
 			}

@@ -1,36 +1,36 @@
 <?php
-require_once 'Tour.php';
-require_once 'TourItem.php';
+require_once 'Landmark.php';
+require_once 'LandmarkItem.php';
 
-class TourBuilder_ToursController extends Omeka_Controller_AbstractActionController
+class LandmarksController extends Omeka_Controller_AbstractActionController
 {
 	public function init()
 	{
-		$this->_helper->db->setDefaultModelName( 'Tour' );
+		$this->_helper->db->setDefaultModelName( 'Landmark' );
 	}
 
 	public function removeitemAction()
 	{
-		// Get the tour and item id from the request
-		$tour = $this->_helper->db->findById();
+		// Get the landmark and item id from the request
+		$landmark = $this->_helper->db->findById();
 		$item_id = $this->getRequest()->getParam( 'item' );
 
-		// Remove the item (id) from the tour
-		$tour->removeItem( $item_id );
+		// Remove the item (id) from the landmark
+		$landmark->removeItem( $item_id );
 
-		// Go back to editing the tour.
+		// Go back to editing the landmark.
 		$this->_redirectToEdit();
 	}
 
 	public function getitemsAction() {
 		$db = get_db();
 		$prefix=$db->prefix;
-		$tour = $this->_helper->db->findById();
+		$landmark = $this->_helper->db->findById();
 		$itemTable = $db->getTable( 'Item' );
 		$items = $itemTable->fetchObjects(
-			"SELECT i.*, (SELECT count(*) FROM ".$prefix."tour_items ti WHERE ti.item_id = i.id AND ti.tour_id = ?) AS `in_tour`
+			"SELECT i.*, (SELECT count(*) FROM ".$prefix."landmark_items ti WHERE ti.item_id = i.id AND ti.landmark_id = ?) AS `in_landmark`
          FROM ".$prefix."items i",
-			array( $tour->id ) );
+			array( $landmark->id ) );
 
 		foreach($items as $key => $arr) {
 			$items[$key]['name'] = metadata( $arr, array( 'Dublin Core', 'Title' ) );
@@ -38,95 +38,95 @@ class TourBuilder_ToursController extends Omeka_Controller_AbstractActionControl
 		}
 
 		$itemsName = $this->view->pluralize( 'item' );
-		$tourName = $this->view->singularize( $this->_helper->db->getDefaultModelName() );
-		$this->view->assign( compact( 'items', 'tour' ) );
+		$landmarkName = $this->view->singularize( $this->_helper->db->getDefaultModelName() );
+		$this->view->assign( compact( 'items', 'landmark' ) );
 	}
 
 	public function browseforitemAction()
 	{
 		$db = get_db();
 		$prefix=$db->prefix;
-		$tour = $this->_helper->db->findById();
+		$landmark = $this->_helper->db->findById();
 
-		# Get all items which are not already in this tour.
+		# Get all items which are not already in this landmark.
 		$itemTable = $db->getTable( 'Item' );
 		/* This did not work, much as I preferred
       $iAlias = $itemTable->getTableAlias();
       $select = $itemTable->getSelect();
-      $select->joinLeft( array( 'ti' => $db->TourItem ),
-         "ti.item_id = $iAlias.id AND ti.tour_id = ?" );
+      $select->joinLeft( array( 'ti' => $db->LandmarkItem ),
+         "ti.item_id = $iAlias.id AND ti.landmark_id = ?" );
       $select->where( 'ti.id IS NULL' );
        */
 
 		# Attach the items to the view
-		#$items = $itemTable->fetchObjects( $select, array( $tour_id ) );
+		#$items = $itemTable->fetchObjects( $select, array( $landmark_id ) );
 		$items = $itemTable->fetchObjects( "SELECT i.*
-         FROM ".$prefix."items i LEFT OUTER JOIN ".$prefix."tour_items ti
-         ON i.id = ti.item_id AND ti.tour_id = ?
+         FROM ".$prefix."items i LEFT OUTER JOIN ".$prefix."landmark_items ti
+         ON i.id = ti.item_id AND ti.landmark_id = ?
          WHERE ti.id IS NULL",
-			array( $tour->id ) );
+			array( $landmark->id ) );
 
 		$itemsName = $this->view->pluralize( 'item' );
-		$tourName = $this->view->singularize( $this->_helper->db->getDefaultModelName() );
-		$this->view->assign( compact( 'items', 'tour' ) );
+		$landmarkName = $this->view->singularize( $this->_helper->db->getDefaultModelName() );
+		$this->view->assign( compact( 'items', 'landmark' ) );
 	}
 
 	public function additemAction()
 	{
-		# Get the tour and item ids
-		$tour = $this->_helper->db->findById();
+		# Get the landmark and item ids
+		$landmark = $this->_helper->db->findById();
 		$item_id = $this->getRequest()->getParam( 'item' );
 
-		$tour->addItem( $item_id );
+		$landmark->addItem( $item_id );
 
 		$this->_redirectToEdit();
 	}
 
 	public function hoistitemAction()
 	{
-		$tour = $this->_helper->db->findById();
+		$landmark = $this->_helper->db->findById();
 		$item_id = $this->getRequest()->getParam( 'item' );
 
-		$tour->hoistItem( $tour->id, intval( $item_id ) );
+		$landmark->hoistItem( $landmark->id, intval( $item_id ) );
 		$this->_redirectToEdit();
 	}
 
 	public function loweritemAction()
 	{
-		$tour = $this->_helper->db->findById();
+		$landmark = $this->_helper->db->findById();
 		$item_id = $this->getRequest()->getParam( 'item' );
 
-		$tour->lowerItem( $tour->id, intval( $item_id ) );
+		$landmark->lowerItem( $landmark->id, intval( $item_id ) );
 		$this->_redirectToEdit();
 	}
 
 	# Called only by AJAX at this point in time
 	# so I don't do any setting of anything for the
 	# view.
-	public function savetouritemsAction() {
-		$tour = $this->_helper->db->findById();
+	public function savelandmarkitemsAction() {
+		$landmark = $this->_helper->db->findById();
 
-		# Remove all of the items in the tour
-		$tour->removeAllItems();
+		# Remove all of the items in the landmark
+		$landmark->removeAllItems();
 
 		# Get our POST of the saveOrder
 		$post = $this->getRequest()->getPost();
 		$aOrder = json_decode($post['saveOrder'],true);
 
-		# Iterate through all of the tour items
-		# passed in an add them to the tour
+		# Iterate through all of the landmark items
+		# passed in an add them to the landmark
 		for($i = 0; $i < count($aOrder); $i++) {
 			$item_id = intval( $aOrder[$i] );
-			$tour->addItem( $item_id, $i );
+			$landmark->addItem( $item_id, $i );
 		}
 	}
 
 	private function _redirectToEdit()
 	{
-		$tour_id = $this->getRequest()->getParam( 'id' );
+		$landmark_id = $this->getRequest()->getParam( 'id' );
 		$this->_helper->redirector->gotoRoute(
 			array( 'action' => 'edit',
-				'id' => $tour_id ),
-			'tourAction' );
+				'id' => $landmark_id ),
+			'landmarkAction' );
 	}
 }
