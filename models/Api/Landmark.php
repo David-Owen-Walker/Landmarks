@@ -120,7 +120,20 @@ class Api_Landmark extends Omeka_Record_Api_AbstractRecordAdapter
             return $result;
         };
         
-        $representation['tags'] = $taTable->fetchObjects($taSelect);
+        $tags = $taTable->fetchObjects( $taSelect );
+        
+        $taGenerator = function($tag){
+            $result = array(
+                'id' => $tag->id,
+                'url' => $this->getResourceUrl("/tags/{$tag->id}"),
+                'name' => $tag->name,
+                'resource' => 'tags'
+            );
+            return $result;
+        };
+        
+        
+        $representation['tags'] = array_map($taGenerator, $tags);
         $representation['element_texts'] = array_map($etGenerator, $elementTexts);
         return $representation;
     }
