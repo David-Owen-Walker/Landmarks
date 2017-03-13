@@ -1,16 +1,29 @@
 <?php
 /**
  */
-class Api_Tour extends Omeka_Record_Api_AbstractRecordAdapter
+class Api_Landmark extends Omeka_Record_Api_AbstractRecordAdapter
 {
+    
     /**
-     * Get the REST representation of a landmark. It's actually just an item, 
-     * so this is just copied from Omeka base code
+     * Initialize the mixins.
+     */
+    protected function _initializeMixins()
+    {
+        $this->_mixins[] = new Mixin_Tag($this);
+        $this->_mixins[] = new Mixin_Owner($this);
+        $this->_mixins[] = new Mixin_ElementText($this);
+        $this->_mixins[] = new Mixin_PublicFeatured($this);
+        $this->_mixins[] = new Mixin_Timestamp($this);
+        $this->_mixins[] = new Mixin_Search($this);
+    }
+    
+    /**
+     * Get the REST representation of a landmark.
      * 
-     * @param Item X Location $record
+     * @param Landmark $record
      * @return array
      */
-    public function getRepresentation(Omeka_Record_AbstractRecord $record)
+     public function getRepresentation(Omeka_Record_AbstractRecord $record)
     {
         $representation = array(
             'id' => $record->id,
@@ -60,8 +73,70 @@ class Api_Tour extends Omeka_Record_Api_AbstractRecordAdapter
             'url' => self::getResourceUrl("/files?item={$record->id}"),
             'resource' => 'files',
         );
-        $representation['tags'] = $this->getTagRepresentations($record);
-        $representation['element_texts'] = $this->getElementTextRepresentations($record);
+        
+        $db = get_db();
+        $etTable = $db->getTable( 'ElementText' );
+        $taTable = $db->getTable( 'Tag' );
+        
+        $etSelect = $etTable->getSelect();
+        $etAlias = $etTable->getTableAlias();
+        $etSelect->join(array( "el"=>$db->Element),
+                        $etAlias . ".element_id = el.id AND " . $etAlias . ".record_id  = " . $record->id,
+//                        . "AND " . $etAlias . "record_type  = 'Item'"
+                        array("element_name"=>"el.name","element_id"=>"el.id")
+                        
+				)->join(array("es"=>$db->ElementSet),
+                        "el.element_set_id = es.id",
+                        array("element_set_name"=>"es.name","element_set_id"=>"es.id")
+				);
+        
+        $taSelect = $taTable->getSelect();
+        $taAlias = $taTable->getTableAlias();
+        $taSelect->join(array( "rt"=>$db->RecordsTag),
+                        "rt.record_id = " . $record->id . " AND rt.tag_id = " . $taAlias . ".id"
+                        
+				);
+        
+        $elementTexts = $etTable->fetchObjects( $etSelect );
+        
+        $etGenerator = function($elementText){
+            $result = array(
+                'text' => $elementText->text,
+                'element_set' => array(
+                    'id'=>$elementText->element_set_id,
+                    'url'=> $this->getResourceUrl("/element_sets/" . $elementText->element_set_id),
+                    'name'=>$elementText->element_set_name,
+                    'resource'=>"element_sets",
+                ),
+                'element' => array(
+                    'id'=>$elementText->element_id,
+                    'url'=> $this->getResourceUrl("/elements/" . $elementText->element_id),
+                    'name'=>$elementText->element_name,
+                    'resource'=>"elements",
+                ),
+                'url' => $this->getResourceUrl("/items/{$tourItem->item_id}"),
+                'resource' => 'items'
+            );
+            return $result;
+        };
+        
+        $tags = $taTable->fetchObjects( $taSelect );
+        
+        $taGenerator = function($tag){
+            $result = array(
+                'id' => $tag->id,
+                'url' => $this->getResourceUrl("/tags/{$tag->id}"),
+                'name' => $tag->name,
+                'resource' => 'tags'
+            );
+            return $result;
+        };
+        
+        
+        $representation['tags'] = array_map($taGenerator, $tags);
+        $representation['element_texts'] = array_map($etGenerator, $elementTexts);
+        
+        
         return $representation;
     }
 }
