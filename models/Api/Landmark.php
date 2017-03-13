@@ -93,8 +93,7 @@ class Api_Landmark extends Omeka_Record_Api_AbstractRecordAdapter
         $taSelect = $taTable->getSelect();
         $taAlias = $taTable->getTableAlias();
         $taSelect->join(array( "rt"=>$db->RecordsTag),
-                        "rt.record_id = " . $record->id . "AND rt.tag_id = " . $taAlias . ".id",
-                        array("element_name"=>"el.name","element_id"=>"el.id")
+                        "rt.record_id = " . $record->id . "AND rt.tag_id = " . $taAlias . ".id"
                         
 				);
         
