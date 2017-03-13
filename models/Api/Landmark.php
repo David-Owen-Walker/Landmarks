@@ -77,9 +77,9 @@ class Api_Landmark extends Omeka_Record_Api_AbstractRecordAdapter
         $db = get_db();
         $etTable = $db->getTable( 'ElementText' );
         $taTable = $db->getTable( 'Tag' );
+        
         $etSelect = $etTable->getSelect();
         $etAlias = $etTable->getTableAlias();
-        
         $etSelect->join(array( "el"=>$db->Element),
                         $etAlias . ".element_id = el.id AND " . $etAlias . ".record_id  = " . $record->id,
 //                        . "AND " . $etAlias . "record_type  = 'Item'"
@@ -90,7 +90,14 @@ class Api_Landmark extends Omeka_Record_Api_AbstractRecordAdapter
                         array("element_set_name"=>"es.name","element_set_id"=>"es.id")
 				);
         
-        # Get the tour items
+        $taSelect = $taTable->getSelect();
+        $taAlias = $taTable->getTableAlias();
+        $taSelect->join(array( "rt"=>$db->RecordsTag),
+                        "rt.record_id = " . $record->id . "AND rt.tag_id = " . $taAlias->id . ".id",
+                        array("element_name"=>"el.name","element_id"=>"el.id")
+                        
+				);
+        
         $elementTexts = $etTable->fetchObjects( $etSelect );
         
         $etGenerator = function($elementText){
@@ -114,9 +121,8 @@ class Api_Landmark extends Omeka_Record_Api_AbstractRecordAdapter
             return $result;
         };
         
-        $representation['tags'] = $taTable->findBy(array('record' => $record));
+        $representation['tags'] = $taTable->fetchObjects($taSelect);
         $representation['element_texts'] = array_map($etGenerator, $elementTexts);
-        $representation['debug'] = get_object_vars($record);
         return $representation;
     }
 }
