@@ -93,9 +93,21 @@ class Api_Landmark extends Omeka_Record_Api_AbstractRecordAdapter
         # Get the tour items
         $elementTexts = $etTable->fetchObjects( $etSelect );
         
-        $generator = function($elementText){
+        $etGenerator = function($elementText){
             $result = array(
                 'text' => $elementText->text,
+                'element_set' => array(
+                    'id'=>$elementText->element_set_id,
+                    'url'=> $this->getResourceUrl("/element_sets/" . $elementText->element_set_id),
+                    'name'=>$elementText->element_set_name,
+                    'resource'=>"element_sets",
+                ),
+                'element' => array(
+                    'id'=>$elementText->element_id,
+                    'url'=> $this->getResourceUrl("/elements/" . $elementText->element_id),
+                    'name'=>$elementText->element_name,
+                    'resource'=>"elements",
+                ),
                 'url' => $this->getResourceUrl("/items/{$tourItem->item_id}"),
                 'resource' => 'items'
             );
@@ -103,7 +115,7 @@ class Api_Landmark extends Omeka_Record_Api_AbstractRecordAdapter
         };
         
         $representation['tags'] = $taTable->findBy(array('record' => $record));
-        $representation['element_texts'] = $elementTexts;
+        $representation['element_texts'] = array_map($etGenerator, $elementTexts);
         $representation['debug'] = get_object_vars($record);
         return $representation;
     }
