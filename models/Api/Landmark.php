@@ -73,8 +73,19 @@ class Api_Landmark extends Omeka_Record_Api_AbstractRecordAdapter
             'url' => self::getResourceUrl("/files?item={$record->id}"),
             'resource' => 'files',
         );
-        $representation['tags'] = $this->getTagRepresentations($record);
-        $representation['element_texts'] = $this->getElementTextRepresentations($record);
+        
+        $db = get_db();
+        $etTable = $db->getTable( 'ElementText' );
+        $taTable = $db->getTable( 'Tag' );
+        $etSelect = $etTable->getSelect();
+        $etSelect->where( 'record_id = ?', array( $record->id ) );
+        # Get the tour items
+        $texts = $etTable->fetchObjects( $etSelect );
+        
+        
+        
+        $representation['tags'] = $taTable->findBy(array('record' => $record));
+        $representation['element_texts'] = $texts;
         $representation['debug'] = get_object_vars($record);
         return $representation;
     }
