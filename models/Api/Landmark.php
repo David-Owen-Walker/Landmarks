@@ -85,9 +85,9 @@ class Api_Landmark extends Omeka_Record_Api_AbstractRecordAdapter
 //                        . "AND " . $etAlias . "record_type  = 'Item'"
 				);
         
-        $etSelect->join(array("es"=>$db->ElementSet),
-                        "el.element_set_id = es.id"
-				);
+//        $etSelect->join(array("es"=>$db->ElementSet),
+//                        "el.element_set_id = es.id"
+//				);
         
         # Get the tour items
         $elementTexts = $etTable->fetchObjects( $etSelect );
