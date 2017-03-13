@@ -78,11 +78,26 @@ class Api_Landmark extends Omeka_Record_Api_AbstractRecordAdapter
         $etTable = $db->getTable( 'ElementText' );
         $taTable = $db->getTable( 'Tag' );
         $etSelect = $etTable->getSelect();
-        $etSelect->where( 'record_id = ?', array( $record->id ) );
+        $etAlias = $etTable->getTableAlias();
+        
+        $etSelect->join(array( "el"=>$db->Element, "es"=>$db->ElementSet),
+                        $etAlias . ".element_id = el.id AND el.element_set_id = es.id
+                        AND " . $etAlias . "record_id  = " . $record->id
+//                        . "AND " . $etAlias . "record_type  = 'Item'"
+				);
+        
+        $etSelect->where( 'record_id = ? AND record_type = ?', array( $record->id, "Item" ) );
         # Get the tour items
-        $texts = $etTable->fetchObjects( $etSelect );
+        $elementTexts = $etTable->fetchObjects( $etSelect );
         
-        
+        $generator = function($elementText){
+            $result = array(
+                'text' => $elementText->text,
+                'url' => $this->getResourceUrl("/items/{$tourItem->item_id}"),
+                'resource' => 'items'
+            );
+            return $result;
+        };
         
         $representation['tags'] = $taTable->findBy(array('record' => $record));
         $representation['element_texts'] = $texts;
