@@ -83,6 +83,8 @@ class Api_Landmark extends Omeka_Record_Api_AbstractRecordAdapter
         $etSelect->join(array( "el"=>$db->Element),
                         $etAlias . ".element_id = el.id AND " . $etAlias . ".record_id  = " . $record->id
 //                        . "AND " . $etAlias . "record_type  = 'Item'"
+				)->join(array("es"=>$db->ElementSet),
+                        "el.element_set_id = es.id"
 				);
         
 //        $etSelect->join(array("es"=>$db->ElementSet),
