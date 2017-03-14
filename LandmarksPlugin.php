@@ -27,40 +27,30 @@ class LandmarksPlugin extends Omeka_Plugin_AbstractPlugin
 	{
 		$db = $this->_db;
 
-		$landmarkQuery = "
-         CREATE TABLE IF NOT EXISTS `$db->Landmark` (
-            `id` int( 10 ) unsigned NOT NULL auto_increment,
-            `title` varchar( 255 ) collate utf8_unicode_ci default NULL,
-            `description` text collate utf8_unicode_ci NOT NULL,
-            `credits` text collate utf8_unicode_ci,
-            `landmark_image` text collate utf8_unicode_ci,
-            `postscript_text` text collate utf8_unicode_ci,
-            `featured` tinyint( 1 ) default '0',
-            `public` tinyint( 1 ) default '0',
-            `slug` varchar( 30 ) collate utf8_unicode_ci default NULL,
-            PRiMARY KEY( `id` ),
-            UNIQUE KEY `slug` ( `slug` )
-         ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ";
-
-		$landmarkItemQuery = "
-         CREATE TABLE IF NOT EXISTS `$db->LandmarkItem` (
-            `id` INT( 10 ) UNSIGNED NOT NULL AUTO_INCREMENT,
-            `landmark_id` INT( 10 ) UNSIGNED NOT NULL,
-            `ordinal` INT NOT NULL,
-            `item_id` INT( 10 ) UNSIGNED NOT NULL,
-            PRIMARY KEY( `id` ),
-            KEY `landmark` ( `landmark_id` )
-         ) ENGINE=InnoDB ";
+		$landmarkQuery =  "CREATE TABLE IF NOT EXISTS ` $db->Item` (
+              `id` int unsigned NOT NULL auto_increment,
+              `item_type_id` int unsigned default NULL,
+              `collection_id` int unsigned default NULL,
+              `featured` tinyint NOT NULL,
+              `public` tinyint NOT NULL,
+              `modified` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+              `added` timestamp NOT NULL DEFAULT '2000-01-01 00:00:00',
+              `owner_id` int unsigned default NULL,
+              PRIMARY KEY  (`id`),
+              KEY `item_type_id` (`item_type_id`),
+              KEY `collection_id` (`collection_id`),
+              KEY `public` (`public`),
+              KEY `featured` (`featured`),
+              KEY `owner_id` (`owner_id`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci";
 
 		$db->query( $landmarkQuery );
-		$db->query( $landmarkItemQuery );
 	}
 
 	public function hookUninstall()
 	{
 		$db = $this->_db;
-		$db->query( "DROP TABLE IF EXISTS `$db->LandmarkItem`" );
-		$db->query( "DROP TABLE IF EXISTS `$db->Landmark`" );
+		$db->query( "DROP TABLE IF EXISTS `$db->Item`" );
 	}
 
     public function hookUpgrade($args)
