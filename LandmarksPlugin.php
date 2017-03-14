@@ -179,7 +179,6 @@ class LandmarksPlugin extends Omeka_Plugin_AbstractPlugin
     {
         $apiResources['landmarks'] = array(
             'record_type' => 'Landmark',
-            'controller' => 'landmarks',
             'actions' => array('get', 'index'),
             'index_params' => array('near')
             
