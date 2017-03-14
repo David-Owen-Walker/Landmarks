@@ -25,7 +25,7 @@ class LandmarksController extends ApiController
         }
         // Get the representation from the record adapter.
         $representation = $recordAdapter->getRepresentation($record);
-//        $representation['extended_resources'] = $extend;
+        $representation['extended_resources'] = $extend;
         return $representation;
     }
 }
