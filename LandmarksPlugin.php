@@ -181,6 +181,7 @@ class LandmarksPlugin extends Omeka_Plugin_AbstractPlugin
             'record_type' => 'Landmark',
             'actions' => array('get', 'index'),
             'index_params' => array('near')
+            
         );
         return $apiResources;
     }
