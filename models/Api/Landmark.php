@@ -155,7 +155,7 @@ class Api_Landmark extends Omeka_Record_Api_AbstractRecordAdapter
 //            }
         }
         
-        $representation['extended_resources'] = $extend;
+        $representation['extended_resources_mirror'] = $extend;
         
         return $representation;
     }
