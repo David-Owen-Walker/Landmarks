@@ -14,45 +14,13 @@ class LandmarksPlugin extends Omeka_Plugin_AbstractPlugin
 		'admin_navigation_main' );
 
 	protected $_hooks = array(
-		'install',
-		'uninstall',
 		'define_acl',
 		'define_routes',
 		'admin_head',
 		'admin_dashboard',
 		'upgrade',
 	);
-
-	public function hookInstall()
-	{
-		$db = $this->_db;
-
-		$landmarkQuery =  "CREATE TABLE IF NOT EXISTS ` $db->Item` (
-              `id` int unsigned NOT NULL auto_increment,
-              `item_type_id` int unsigned default NULL,
-              `collection_id` int unsigned default NULL,
-              `featured` tinyint NOT NULL,
-              `public` tinyint NOT NULL,
-              `modified` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
-              `added` timestamp NOT NULL DEFAULT '2000-01-01 00:00:00',
-              `owner_id` int unsigned default NULL,
-              PRIMARY KEY  (`id`),
-              KEY `item_type_id` (`item_type_id`),
-              KEY `collection_id` (`collection_id`),
-              KEY `public` (`public`),
-              KEY `featured` (`featured`),
-              KEY `owner_id` (`owner_id`)
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci";
-
-		$db->query( $landmarkQuery );
-	}
-
-	public function hookUninstall()
-	{
-		$db = $this->_db;
-		$db->query( "DROP TABLE IF EXISTS `$db->Item`" );
-	}
-
+    
     public function hookUpgrade($args)
     {
         $oldVersion = $args['old_version'];
