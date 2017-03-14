@@ -14,70 +14,11 @@ class LandmarksPlugin extends Omeka_Plugin_AbstractPlugin
 		'admin_navigation_main' );
 
 	protected $_hooks = array(
-		'install',
-		'uninstall',
 		'define_acl',
 		'define_routes',
 		'admin_head',
 		'admin_dashboard',
-		'upgrade',
 	);
-
-	public function hookInstall()
-	{
-		$db = $this->_db;
-
-		$landmarkQuery = "
-         CREATE TABLE IF NOT EXISTS `$db->Landmark` (
-            `id` int( 10 ) unsigned NOT NULL auto_increment,
-            `title` varchar( 255 ) collate utf8_unicode_ci default NULL,
-            `description` text collate utf8_unicode_ci NOT NULL,
-            `credits` text collate utf8_unicode_ci,
-            `landmark_image` text collate utf8_unicode_ci,
-            `postscript_text` text collate utf8_unicode_ci,
-            `featured` tinyint( 1 ) default '0',
-            `public` tinyint( 1 ) default '0',
-            `slug` varchar( 30 ) collate utf8_unicode_ci default NULL,
-            PRiMARY KEY( `id` ),
-            UNIQUE KEY `slug` ( `slug` )
-         ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ";
-
-		$landmarkItemQuery = "
-         CREATE TABLE IF NOT EXISTS `$db->LandmarkItem` (
-            `id` INT( 10 ) UNSIGNED NOT NULL AUTO_INCREMENT,
-            `landmark_id` INT( 10 ) UNSIGNED NOT NULL,
-            `ordinal` INT NOT NULL,
-            `item_id` INT( 10 ) UNSIGNED NOT NULL,
-            PRIMARY KEY( `id` ),
-            KEY `landmark` ( `landmark_id` )
-         ) ENGINE=InnoDB ";
-
-		$db->query( $landmarkQuery );
-		$db->query( $landmarkItemQuery );
-	}
-
-	public function hookUninstall()
-	{
-		$db = $this->_db;
-		$db->query( "DROP TABLE IF EXISTS `$db->LandmarkItem`" );
-		$db->query( "DROP TABLE IF EXISTS `$db->Landmark`" );
-	}
-
-    public function hookUpgrade($args)
-    {
-        $oldVersion = $args['old_version'];
-        $newVersion = $args['new_version'];
-        $db = $this->_db;
-
-        if ($oldVersion < '1.4') {
-
-            $sql = "ALTER TABLE `$db->Landmark` ADD COLUMN `postscript_text` text collate utf8_unicode_ci default NULL";
-            $db->query($sql);
-
-            $sql = "ALTER TABLE `$db->Landmark` ADD COLUMN `landmark_image` text collate utf8_unicode_ci default NULL";
-            $db->query($sql);
-	    }
-	}
 
 	public function hookDefineAcl( $args )
 	{
@@ -88,9 +29,6 @@ class LandmarksPlugin extends Omeka_Plugin_AbstractPlugin
 
 		// Allow anyone to look but not touch
 		$acl->allow( null, 'Landmarks', array('browse', 'show') );
-
-		// Allow contributor (and better) to do anything with landmarks
-		$acl->allow( 'contributor','Landmarks');
 
 	}
 
