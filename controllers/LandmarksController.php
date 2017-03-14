@@ -1,6 +1,5 @@
 <?php
 require_once 'Landmark.php';
-require_once 'LandmarkItem.php';
 
 class LandmarksController extends ApiController
 {
