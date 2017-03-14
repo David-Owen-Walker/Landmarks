@@ -137,6 +137,25 @@ class Api_Landmark extends Omeka_Record_Api_AbstractRecordAdapter
         $representation['element_texts'] = array_map($etGenerator, $elementTexts);
         
         
+        $extend = array();
+        $extendTemp = apply_filters("api_extend_items", array(), array('record' => $record));
+        $apiResources = $this->getFrontController()->getParam('api_resources');
+        // Validate each extended resource. Each must be registered as an API
+        // resource and the content must contain "id" and "url" for one resource
+        // or "count" and "url" for multiple resources. A "resource" is
+        // recommended but not mandatory. Everything else passes through as
+        // custom data that may be used for the client's convenience.
+        foreach ($extendTemp as $extendResource => $extendContent) {
+//            if (is_array($extendContent)
+//                && array_key_exists($extendResource, $apiResources)
+//                && (array_key_exists('count', $extendContent) || array_key_exists('id', $extendContent))
+//                && array_key_exists('url', $extendContent)
+//            ) {
+                $extend[$extendResource] = $extendContent;
+//            }
+        }
+        
+        $representation['extended_resources'] = $extend;
         
         return $representation;
     }

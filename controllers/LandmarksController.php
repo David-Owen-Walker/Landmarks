@@ -2,7 +2,7 @@
 require_once 'Landmark.php';
 require_once 'LandmarkItem.php';
 
-class LandmarksController extends Omeka_Controller_AbstractActionController
+class LandmarksController extends ApiController
 {
 	public function init()
 	{
@@ -23,18 +23,21 @@ class LandmarksController extends Omeka_Controller_AbstractActionController
         // or "count" and "url" for multiple resources. A "resource" is
         // recommended but not mandatory. Everything else passes through as
         // custom data that may be used for the client's convenience.
-        foreach ($extendTemp as $extendResource => $extendContent) {
-            if (is_array($extendContent)
-                && array_key_exists($extendResource, $apiResources)
-                && (array_key_exists('count', $extendContent) || array_key_exists('id', $extendContent))
-                && array_key_exists('url', $extendContent)
-            ) {
-                $extend[$extendResource] = $extendContent;
-            }
-        }
-        
-        $representation['extended_resources'] = $extend;
-    }
+//        foreach ($extendTemp as $extendResource => $extendContent) {
+//            if (is_array($extendContent)
+//                && array_key_exists($extendResource, $apiResources)
+//                && (array_key_exists('count', $extendContent) || array_key_exists('id', $extendContent))
+//                && array_key_exists('url', $extendContent)
+//            ) {
+//                $extend[$extendResource] = $extendContent;
+//            }
+//        }
+//        
+//        $representation['extended_resources'] = $extend;
+        $representation = $recordAdapter->getRepresentation($record);
+//        $representation['extended_resources'] = $extend;
+        return $representation;
+//    }
 
     public function removeitemAction()
 	{
