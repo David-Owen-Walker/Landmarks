@@ -18,24 +18,7 @@ class LandmarksPlugin extends Omeka_Plugin_AbstractPlugin
 		'define_routes',
 		'admin_head',
 		'admin_dashboard',
-		'upgrade',
 	);
-    
-    public function hookUpgrade($args)
-    {
-        $oldVersion = $args['old_version'];
-        $newVersion = $args['new_version'];
-        $db = $this->_db;
-
-        if ($oldVersion < '1.4') {
-
-            $sql = "ALTER TABLE `$db->Landmark` ADD COLUMN `postscript_text` text collate utf8_unicode_ci default NULL";
-            $db->query($sql);
-
-            $sql = "ALTER TABLE `$db->Landmark` ADD COLUMN `landmark_image` text collate utf8_unicode_ci default NULL";
-            $db->query($sql);
-	    }
-	}
 
 	public function hookDefineAcl( $args )
 	{
