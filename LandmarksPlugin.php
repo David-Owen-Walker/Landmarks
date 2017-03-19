@@ -57,5 +57,3 @@ class LandmarksPlugin extends Omeka_Plugin_AbstractPlugin
         return $apiResources;
     }
 }
-
-include 'helpers/LandmarkFunctions.php';
