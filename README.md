@@ -1,6 +1,2 @@
-Fork of the CPHDH LandmarkBuilder project meant to expose the Landmarks via Omeka's rest API
-
-The purpose of the modifications is to make this plugin appropriate for use with a mobile application. 
-This means that the landmarks will be exposed over omeka's rest api, and that more capacity for sorting
-will be added to the server. In particular, landmarks can be sorted according to distance from a point.
-
+Omeka plugin designed as a point of extension for items, particularly with respect to the API.
+This implementation adds location-based sorting to the items, but the functionality could be extended to modify the API in any number of ways.
