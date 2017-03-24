@@ -27,7 +27,7 @@ class Api_Landmark extends Omeka_Record_Api_AbstractRecordAdapter
     {
         $representation = array(
             'id' => $record->id,
-            'url' => self::getResourceUrl("/items/{$record->id}"),
+            'url' => self::getResourceUrl("/landmarks/{$record->id}"),
             'public' => (bool) $record->public,
             'featured' => (bool) $record->featured,
             'added' => self::getDate($record->added),
