@@ -10,8 +10,7 @@ class LandmarksPlugin extends Omeka_Plugin_AbstractPlugin
 	protected $_filters = array('api_resources');
 
 	protected $_hooks = array(
-		'define_acl',
-		'define_routes',
+		'define_acl'
 	);
 
 	public function hookDefineAcl( $args )
@@ -27,15 +26,6 @@ class LandmarksPlugin extends Omeka_Plugin_AbstractPlugin
 		// Allow contributor (and better) to do anything with landmarks
 		$acl->allow( 'contributor','Landmarks');
 
-	}
-
-	public function hookDefineRoutes( $args )
-	{
-		$router = $args['router'];
-		$router->addConfig( new Zend_Config_Ini(
-				LANDMARKS_PLUGIN_DIR .
-				DIRECTORY_SEPARATOR .
-				'routes.ini', 'routes' ) );
 	}
 
 	public function filterPublicNavigationMain( $navs )
