@@ -32,7 +32,7 @@ class LandmarkTable extends Omeka_Db_Table
 			$alias = $this->getTableAlias();
 
 			$select->join(array("loc"=>$db->Location),
-                          "loc.item_id = " . $alias .".id AND ".$alias.".public = true",
+                          "loc.item_id = " . $alias .".id",
                           array("distance"=> $distance));
 
 			$select->reset( Zend_Db_Select::ORDER );
