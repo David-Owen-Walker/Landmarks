@@ -8,6 +8,11 @@ class LandmarkTable extends Omeka_Db_Table
         $this->_name = 'items';
     }
     
+    public function getSelect() {
+        $select = get_db()->getTable("Item")->getSelect();
+        $select->where($this->getTableAlias.".public = true");
+    }
+    
 	public function getSelectForFindBy($params = array())
     	{
         $select = $this->getSelect();
