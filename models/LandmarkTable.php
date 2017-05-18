@@ -11,6 +11,7 @@ class LandmarkTable extends Omeka_Db_Table
     public function getSelect() {
         $select = get_db()->getTable("Item")->getSelect();
         $select->where($this->getTableAlias.".public = true");
+        return $select;
     }
     
 	public function getSelectForFindBy($params = array())
